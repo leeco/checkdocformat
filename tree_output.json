@@ -1,0 +1,2724 @@
+{
+    "type": "root",
+    "content": "Document Root",
+    "font": null,
+    "size": null,
+    "font_size_name": null,
+    "bold": false,
+    "spacing": null,
+    "line_spacing": null,
+    "indentation": null,
+    "outline_level": null,
+    "alignment": null,
+    "direction": null,
+    "paragraph_format": null,
+    "children": [
+        {
+            "type": "paragraph",
+            "content": "长城证券股份有限公司文件",
+            "font": "方正小标宋简体",
+            "size": 36.0,
+            "font_size_name": "小初",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 1.0,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "居中",
+                "raw_value": "CENTER (1)"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "居中",
+                    "raw_value": "CENTER (1)"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "单倍行距",
+                    "value": 1.0,
+                    "unit": "倍数",
+                    "unit_code": "multiple"
+                }
+            },
+            "children": []
+        },
+        {
+            "type": "paragraph",
+            "content": "长证字〔20**〕***号",
+            "font": "仿宋_GB2312",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 1.0,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 9.9,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 15.55,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "居中",
+                "raw_value": "CENTER (1)"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "居中",
+                    "raw_value": "CENTER (1)"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 9.9,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 15.55,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "单倍行距",
+                    "value": 1.0,
+                    "unit": "倍数",
+                    "unit_code": "multiple"
+                }
+            },
+            "children": []
+        },
+        {
+            "type": "paragraph",
+            "content": "关于****事项\\工作\\情况的报告\\请示\\申请",
+            "font": "方正小标宋简体",
+            "size": 22.0,
+            "font_size_name": "小二",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "居中",
+                "raw_value": "CENTER (1)"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "居中",
+                    "raw_value": "CENTER (1)"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": []
+        },
+        {
+            "type": "paragraph",
+            "content": "XXXXX：",
+            "font": "仿宋_GB2312",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": []
+        },
+        {
+            "type": "paragraph",
+            "content": "格式具体要求如下：",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": []
+        },
+        {
+            "type": "heading1",
+            "content": "一、标题",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": [
+                {
+                    "type": "paragraph",
+                    "content": "由单位名称、事由和文种组成。其中单位名称可视情况省略，但事由和文种必备；字体为方正小标宋简体，字号为二号且不加粗。",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                }
+            ]
+        },
+        {
+            "type": "heading1",
+            "content": "二、正文",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": [
+                {
+                    "type": "paragraph",
+                    "content": "字体为仿宋_GB2312，字号为三号且不加粗，编排于主送机关名称下一行，每个自然段左空二字，回行顶格。一般每面排22行,每行排28个字，特殊情况除外。",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                }
+            ]
+        },
+        {
+            "type": "heading1",
+            "content": "三、公文的结构层次序数",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": [
+                {
+                    "type": "paragraph",
+                    "content": "文中结构层次序数依次可以用“一、”“（一）”“1.”“（1）”标注；一般第一层用黑体三号字不加粗、第二层用楷体三号字、第三层和第四层用仿宋_GB2312三号字标注。",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                },
+                {
+                    "type": "paragraph",
+                    "content": "实际行文中，如果不需要全部四个层次，只有两个层次时，可按顺序跳用，第一层使用“一、”，第二层可使用（一）或“1.”表示，只有一个层次时，使用“一、”",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                }
+            ]
+        },
+        {
+            "type": "heading1",
+            "content": "四、结尾",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": [
+                {
+                    "type": "paragraph",
+                    "content": "特此报告\\请示\\申请。另起一行，左空二字，字体为仿宋_GB2312三号。",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                }
+            ]
+        },
+        {
+            "type": "heading1",
+            "content": "五、落款",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": [
+                {
+                    "type": "paragraph",
+                    "content": "拟稿部门或单位：没有附件时，则正文下空一行，右空四字；有附件时，则附件下空二行，右空四字。日期：用阿拉伯数字将年、月、日标全，年份应标全称，月、日不编虚位（即1不编为01），另起一行，位于拟稿部门或单位下方正中间。",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                }
+            ]
+        },
+        {
+            "type": "heading1",
+            "content": "六、附件说明",
+            "font": "黑体",
+            "size": 16.0,
+            "font_size_name": "小三",
+            "bold": false,
+            "spacing": 0,
+            "line_spacing": 28.8,
+            "indentation": {
+                "left": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "outline_level": {
+                "type": "大纲级别",
+                "value": "正文文本",
+                "raw_value": 9
+            },
+            "alignment": {
+                "type": "对齐方式",
+                "value": "左对齐",
+                "raw_value": "None"
+            },
+            "direction": {
+                "type": "方向",
+                "value": "从左向右",
+                "raw_value": "LTR"
+            },
+            "paragraph_format": {
+                "alignment": {
+                    "type": "对齐方式",
+                    "value": "左对齐",
+                    "raw_value": "None"
+                },
+                "outline_level": {
+                    "type": "大纲级别",
+                    "value": "正文文本",
+                    "raw_value": 9
+                },
+                "direction": {
+                    "type": "方向",
+                    "value": "从左向右",
+                    "raw_value": "LTR"
+                },
+                "left_indent": {
+                    "type": "左缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "right_indent": {
+                    "type": "右缩进",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "first_line_indent": {
+                    "type": "首行缩进",
+                    "value": 31.1,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_before": {
+                    "type": "段前间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "space_after": {
+                    "type": "段后间距",
+                    "value": 0,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                },
+                "line_spacing": {
+                    "type": "行距",
+                    "rule": "固定值",
+                    "value": 28.8,
+                    "unit": "磅",
+                    "unit_code": "pt"
+                }
+            },
+            "children": [
+                {
+                    "type": "paragraph",
+                    "content": "正文下空一行左空二字编排“附件”二字，后标全角冒号和附件名称。如有多个附件，使用阿拉伯数字标注附件顺序号（如：“附件：1.XXXX”）；附件名称后不加标点符号。附件名称较长需回行时，应当与上一行附件名称的首字对齐。字体为仿宋_GB2312三号），附件格式如下：",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 31.1,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                },
+                {
+                    "type": "paragraph",
+                    "content": "附件：1.关于****有限公司****************************申请表",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 93.3,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "hanging": {
+                            "type": "悬挂缩进",
+                            "value": 62.2,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "None"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "None"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 93.3,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "hanging_indent": {
+                            "type": "悬挂缩进",
+                            "value": 62.2,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                },
+                {
+                    "type": "heading3",
+                    "content": "2.关于****有限公司*****",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 77.75,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "LEFT (0)"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "LEFT (0)"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 77.75,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": []
+                },
+                {
+                    "type": "heading3",
+                    "content": "3.关于****有限公司*****",
+                    "font": "仿宋_GB2312",
+                    "size": 16.0,
+                    "font_size_name": "小三",
+                    "bold": false,
+                    "spacing": 0,
+                    "line_spacing": 28.8,
+                    "indentation": {
+                        "left": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line": {
+                            "type": "首行缩进",
+                            "value": 77.75,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "outline_level": {
+                        "type": "大纲级别",
+                        "value": "正文文本",
+                        "raw_value": 9
+                    },
+                    "alignment": {
+                        "type": "对齐方式",
+                        "value": "左对齐",
+                        "raw_value": "LEFT (0)"
+                    },
+                    "direction": {
+                        "type": "方向",
+                        "value": "从左向右",
+                        "raw_value": "LTR"
+                    },
+                    "paragraph_format": {
+                        "alignment": {
+                            "type": "对齐方式",
+                            "value": "左对齐",
+                            "raw_value": "LEFT (0)"
+                        },
+                        "outline_level": {
+                            "type": "大纲级别",
+                            "value": "正文文本",
+                            "raw_value": 9
+                        },
+                        "direction": {
+                            "type": "方向",
+                            "value": "从左向右",
+                            "raw_value": "LTR"
+                        },
+                        "left_indent": {
+                            "type": "左缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "right_indent": {
+                            "type": "右缩进",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "first_line_indent": {
+                            "type": "首行缩进",
+                            "value": 77.75,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_before": {
+                            "type": "段前间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "space_after": {
+                            "type": "段后间距",
+                            "value": 0,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        },
+                        "line_spacing": {
+                            "type": "行距",
+                            "rule": "固定值",
+                            "value": 28.8,
+                            "unit": "磅",
+                            "unit_code": "pt"
+                        }
+                    },
+                    "children": [
+                        {
+                            "type": "paragraph",
+                            "content": "长城证券股份有限公司",
+                            "font": "仿宋_GB2312",
+                            "size": 16.0,
+                            "font_size_name": "小三",
+                            "bold": false,
+                            "spacing": 0,
+                            "line_spacing": 28.8,
+                            "indentation": {
+                                "left": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right": {
+                                    "type": "右缩进",
+                                    "value": 1.15,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "outline_level": {
+                                "type": "大纲级别",
+                                "value": "正文文本",
+                                "raw_value": 9
+                            },
+                            "alignment": {
+                                "type": "对齐方式",
+                                "value": "左对齐",
+                                "raw_value": "LEFT (0)"
+                            },
+                            "direction": {
+                                "type": "方向",
+                                "value": "从左向右",
+                                "raw_value": "LTR"
+                            },
+                            "paragraph_format": {
+                                "alignment": {
+                                    "type": "对齐方式",
+                                    "value": "左对齐",
+                                    "raw_value": "LEFT (0)"
+                                },
+                                "outline_level": {
+                                    "type": "大纲级别",
+                                    "value": "正文文本",
+                                    "raw_value": 9
+                                },
+                                "direction": {
+                                    "type": "方向",
+                                    "value": "从左向右",
+                                    "raw_value": "LTR"
+                                },
+                                "left_indent": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right_indent": {
+                                    "type": "右缩进",
+                                    "value": 1.15,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line_indent": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_before": {
+                                    "type": "段前间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_after": {
+                                    "type": "段后间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "line_spacing": {
+                                    "type": "行距",
+                                    "rule": "固定值",
+                                    "value": 28.8,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "children": []
+                        },
+                        {
+                            "type": "paragraph",
+                            "content": "20**年**月**日",
+                            "font": "仿宋_GB2312",
+                            "size": 16.0,
+                            "font_size_name": "小三",
+                            "bold": false,
+                            "spacing": 0,
+                            "line_spacing": 28.8,
+                            "indentation": {
+                                "left": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right": {
+                                    "type": "右缩进",
+                                    "value": 61.8,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "outline_level": {
+                                "type": "大纲级别",
+                                "value": "正文文本",
+                                "raw_value": 9
+                            },
+                            "alignment": {
+                                "type": "对齐方式",
+                                "value": "居中",
+                                "raw_value": "CENTER (1)"
+                            },
+                            "direction": {
+                                "type": "方向",
+                                "value": "从左向右",
+                                "raw_value": "LTR"
+                            },
+                            "paragraph_format": {
+                                "alignment": {
+                                    "type": "对齐方式",
+                                    "value": "居中",
+                                    "raw_value": "CENTER (1)"
+                                },
+                                "outline_level": {
+                                    "type": "大纲级别",
+                                    "value": "正文文本",
+                                    "raw_value": 9
+                                },
+                                "direction": {
+                                    "type": "方向",
+                                    "value": "从左向右",
+                                    "raw_value": "LTR"
+                                },
+                                "left_indent": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right_indent": {
+                                    "type": "右缩进",
+                                    "value": 61.8,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line_indent": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_before": {
+                                    "type": "段前间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_after": {
+                                    "type": "段后间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "line_spacing": {
+                                    "type": "行距",
+                                    "rule": "固定值",
+                                    "value": 28.8,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "children": []
+                        },
+                        {
+                            "type": "paragraph",
+                            "content": "————————————————————————————————",
+                            "font": "楷体_GB2312",
+                            "size": 14.0,
+                            "font_size_name": "小四",
+                            "bold": false,
+                            "spacing": 0,
+                            "line_spacing": 16.0,
+                            "indentation": {
+                                "left": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right": {
+                                    "type": "右缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "outline_level": {
+                                "type": "大纲级别",
+                                "value": "正文文本",
+                                "raw_value": 9
+                            },
+                            "alignment": {
+                                "type": "对齐方式",
+                                "value": "左对齐",
+                                "raw_value": "None"
+                            },
+                            "direction": {
+                                "type": "方向",
+                                "value": "从左向右",
+                                "raw_value": "LTR"
+                            },
+                            "paragraph_format": {
+                                "alignment": {
+                                    "type": "对齐方式",
+                                    "value": "左对齐",
+                                    "raw_value": "None"
+                                },
+                                "outline_level": {
+                                    "type": "大纲级别",
+                                    "value": "正文文本",
+                                    "raw_value": 9
+                                },
+                                "direction": {
+                                    "type": "方向",
+                                    "value": "从左向右",
+                                    "raw_value": "LTR"
+                                },
+                                "left_indent": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right_indent": {
+                                    "type": "右缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line_indent": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_before": {
+                                    "type": "段前间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_after": {
+                                    "type": "段后间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "line_spacing": {
+                                    "type": "行距",
+                                    "rule": "固定值",
+                                    "value": 16.0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "children": []
+                        },
+                        {
+                            "type": "paragraph",
+                            "content": "长城证券股份有限公司                        20**年**月**日印发",
+                            "font": "仿宋_GB2312",
+                            "size": 14.0,
+                            "font_size_name": "小四",
+                            "bold": false,
+                            "spacing": 0,
+                            "line_spacing": 16.0,
+                            "indentation": {
+                                "left": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right": {
+                                    "type": "右缩进",
+                                    "value": -37.7,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line": {
+                                    "type": "首行缩进",
+                                    "value": 13.55,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "outline_level": {
+                                "type": "大纲级别",
+                                "value": "正文文本",
+                                "raw_value": 9
+                            },
+                            "alignment": {
+                                "type": "对齐方式",
+                                "value": "左对齐",
+                                "raw_value": "None"
+                            },
+                            "direction": {
+                                "type": "方向",
+                                "value": "从左向右",
+                                "raw_value": "LTR"
+                            },
+                            "paragraph_format": {
+                                "alignment": {
+                                    "type": "对齐方式",
+                                    "value": "左对齐",
+                                    "raw_value": "None"
+                                },
+                                "outline_level": {
+                                    "type": "大纲级别",
+                                    "value": "正文文本",
+                                    "raw_value": 9
+                                },
+                                "direction": {
+                                    "type": "方向",
+                                    "value": "从左向右",
+                                    "raw_value": "LTR"
+                                },
+                                "left_indent": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right_indent": {
+                                    "type": "右缩进",
+                                    "value": -37.7,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line_indent": {
+                                    "type": "首行缩进",
+                                    "value": 13.55,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_before": {
+                                    "type": "段前间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_after": {
+                                    "type": "段后间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "line_spacing": {
+                                    "type": "行距",
+                                    "rule": "固定值",
+                                    "value": 16.0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "children": []
+                        },
+                        {
+                            "type": "paragraph",
+                            "content": "————————————————————————————————",
+                            "font": "楷体_GB2312",
+                            "size": 14.0,
+                            "font_size_name": "小四",
+                            "bold": false,
+                            "spacing": 0,
+                            "line_spacing": 16.0,
+                            "indentation": {
+                                "left": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right": {
+                                    "type": "右缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "outline_level": {
+                                "type": "大纲级别",
+                                "value": "正文文本",
+                                "raw_value": 9
+                            },
+                            "alignment": {
+                                "type": "对齐方式",
+                                "value": "左对齐",
+                                "raw_value": "None"
+                            },
+                            "direction": {
+                                "type": "方向",
+                                "value": "从左向右",
+                                "raw_value": "LTR"
+                            },
+                            "paragraph_format": {
+                                "alignment": {
+                                    "type": "对齐方式",
+                                    "value": "左对齐",
+                                    "raw_value": "None"
+                                },
+                                "outline_level": {
+                                    "type": "大纲级别",
+                                    "value": "正文文本",
+                                    "raw_value": 9
+                                },
+                                "direction": {
+                                    "type": "方向",
+                                    "value": "从左向右",
+                                    "raw_value": "LTR"
+                                },
+                                "left_indent": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right_indent": {
+                                    "type": "右缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line_indent": {
+                                    "type": "首行缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_before": {
+                                    "type": "段前间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_after": {
+                                    "type": "段后间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "line_spacing": {
+                                    "type": "行距",
+                                    "rule": "固定值",
+                                    "value": 16.0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "children": []
+                        },
+                        {
+                            "type": "paragraph",
+                            "content": "校对：**",
+                            "font": "仿宋_GB2312",
+                            "size": 14.0,
+                            "font_size_name": "小四",
+                            "bold": false,
+                            "spacing": 0,
+                            "line_spacing": 16.0,
+                            "indentation": {
+                                "left": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right": {
+                                    "type": "右缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line": {
+                                    "type": "首行缩进",
+                                    "value": 13.55,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "outline_level": {
+                                "type": "大纲级别",
+                                "value": "正文文本",
+                                "raw_value": 9
+                            },
+                            "alignment": {
+                                "type": "对齐方式",
+                                "value": "左对齐",
+                                "raw_value": "None"
+                            },
+                            "direction": {
+                                "type": "方向",
+                                "value": "从左向右",
+                                "raw_value": "LTR"
+                            },
+                            "paragraph_format": {
+                                "alignment": {
+                                    "type": "对齐方式",
+                                    "value": "左对齐",
+                                    "raw_value": "None"
+                                },
+                                "outline_level": {
+                                    "type": "大纲级别",
+                                    "value": "正文文本",
+                                    "raw_value": 9
+                                },
+                                "direction": {
+                                    "type": "方向",
+                                    "value": "从左向右",
+                                    "raw_value": "LTR"
+                                },
+                                "left_indent": {
+                                    "type": "左缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "right_indent": {
+                                    "type": "右缩进",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "first_line_indent": {
+                                    "type": "首行缩进",
+                                    "value": 13.55,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_before": {
+                                    "type": "段前间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "space_after": {
+                                    "type": "段后间距",
+                                    "value": 0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                },
+                                "line_spacing": {
+                                    "type": "行距",
+                                    "rule": "固定值",
+                                    "value": 16.0,
+                                    "unit": "磅",
+                                    "unit_code": "pt"
+                                }
+                            },
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
