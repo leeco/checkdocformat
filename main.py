@@ -3,7 +3,9 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
 from docx.shared import Inches, Cm, Mm, Pt, Emu
 import json
 import numpy as np  # 用于统计分析
-from check import check_file
+
+# 导入AI节点分类器
+from ai_node_classifier import create_classifier
 
 def pt_to_font_size(pt_size):
     """将磅值转换为中文标准字号"""
@@ -28,50 +30,230 @@ def pt_to_font_size(pt_size):
     closest_size = min(font_size_map.keys(), key=lambda x: abs(x - pt_size))
     return font_size_map[closest_size]
 
+def format_char_value(value):
+    """格式化字符数值，返回中文表示"""
+    if value == 0:
+        return "0字"
+    elif value == int(value):
+        return f"{int(value)}字"
+    else:
+        return f"{value}字"
+
+def pt_to_char_accurate(pt_value, font_size=12, font_name="Default"):
+    """
+    根据实际字体和字号计算磅值到字符数的转换
+    """
+    if pt_value <= 0:
+        return 0
+    
+    # 根据字体类型和字号计算实际字符宽度
+    char_width = calculate_char_width(font_size, font_name)
+    
+    # 计算字符数
+    char_count = pt_value / char_width
+    
+    # 四舍五入到0.1精度
+    return round(char_count, 1)
+
+def calculate_char_width(font_size, font_name="Default"):
+    """
+    根据字体和字号计算中文字符的实际宽度（磅值）
+    """
+    # 不同字体的字符宽度系数
+    font_width_factors = {
+        '宋体': 1.0,
+        'SimSun': 1.0,
+        '仿宋': 1.0,
+        'FangSong': 1.0,
+        '仿宋_GB2312': 1.0,
+        '黑体': 1.0,
+        'SimHei': 1.0,
+        '楷体': 1.0,
+        'KaiTi': 1.0,
+        '微软雅黑': 0.95,
+        'Microsoft YaHei': 0.95,
+        'Arial': 0.6,  # 英文字体较窄
+        'Times New Roman': 0.6,
+        'Calibri': 0.6,
+        'Default': 1.0,  # 默认按中文字体处理
+    }
+    
+    # 获取字体宽度系数
+    width_factor = font_width_factors.get(font_name, 1.0)
+    
+    # 在Word中，中文字符的宽度通常等于字号磅值
+    # 但需要考虑字体的实际宽度特征
+    base_char_width = font_size * width_factor
+    
+    # 对于中文字体，还需要考虑Word的内部渲染方式
+    # 经验调整：Word中的字符宽度通常比理论值略小
+    if font_name in ['宋体', 'SimSun', '仿宋', 'FangSong', '仿宋_GB2312', 'Default']:
+        # 中文字体的经验调整系数
+        base_char_width *= 0.92
+    
+    return base_char_width
+
+# 全局配置：可以根据实际情况调整字符转换比例
+CHAR_CONVERSION_RATIO = 11.2  # 1字符对应的磅值
+
+def adjust_char_conversion_ratio(new_ratio):
+    """调整字符转换比例"""
+    global CHAR_CONVERSION_RATIO
+    CHAR_CONVERSION_RATIO = new_ratio
+    print(f"字符转换比例已调整为: 1字符 = {new_ratio}磅")
+
 def get_measurement_info(measurement):
     """Get measurement value and unit from Word measurement object"""
     if measurement is None:
-        return None, None, None
+        return 0, '磅', 'pt'
     
-    # 检查测量对象的类型和单位
-    if hasattr(measurement, 'pt'):
-        # 如果是磅
-        return measurement.pt, '磅', 'pt'
-    elif hasattr(measurement, 'inches'):
-        # 如果是英寸
-        return measurement.inches, '英寸', 'inch'
-    elif hasattr(measurement, 'cm'):
-        # 如果是厘米
-        return measurement.cm, '厘米', 'cm'
-    elif hasattr(measurement, 'mm'):
-        # 如果是毫米
-        return measurement.mm, '毫米', 'mm'
-    elif hasattr(measurement, 'emu'):
-        # 如果是EMU (English Metric Units)
-        return measurement.emu, 'EMU', 'emu'
-    else:
-        # 如果是字符或其他单位
-        return measurement, '字符', 'char'
+    try:
+        # python-docx测量对象有多种属性，优先选择最常用的
+        if hasattr(measurement, 'pt') and measurement.pt is not None:
+            return round(measurement.pt, 2), '磅', 'pt'
+        elif hasattr(measurement, 'inches') and measurement.inches is not None:
+            return round(measurement.inches, 2), '英寸', 'inch'
+        elif hasattr(measurement, 'cm') and measurement.cm is not None:
+            return round(measurement.cm, 2), '厘米', 'cm'
+        elif hasattr(measurement, 'mm') and measurement.mm is not None:
+            return round(measurement.mm, 2), '毫米', 'mm'
+        elif hasattr(measurement, 'emu') and measurement.emu is not None:
+            # EMU转换为磅 (1 point = 12700 EMU)
+            pt_value = measurement.emu / 12700
+            return round(pt_value, 2), '磅', 'pt'
+        else:
+            # 如果是数字，假设是磅
+            try:
+                return round(float(measurement), 2), '磅', 'pt'
+            except (TypeError, ValueError):
+                return 0, '磅', 'pt'
+    except Exception:
+        return 0, '磅', 'pt'
+
+def get_alignment_value(alignment):
+    """获取对齐方式的中文描述"""
+    if alignment is None:
+        return '左对齐', 'None'
+    
+    try:
+        # 首先尝试直接比较枚举值
+        if alignment == WD_ALIGN_PARAGRAPH.LEFT:
+            return '左对齐', 'LEFT (0)'
+        elif alignment == WD_ALIGN_PARAGRAPH.CENTER:
+            return '居中', 'CENTER (1)'
+        elif alignment == WD_ALIGN_PARAGRAPH.RIGHT:
+            return '右对齐', 'RIGHT (2)'
+        elif alignment == WD_ALIGN_PARAGRAPH.JUSTIFY:
+            return '两端对齐', 'JUSTIFY (3)'
+        elif alignment == WD_ALIGN_PARAGRAPH.DISTRIBUTE:
+            return '分散对齐', 'DISTRIBUTE (4)'
+        elif alignment == WD_ALIGN_PARAGRAPH.THAI_JUSTIFY:
+            return '泰文两端对齐', 'THAI_JUSTIFY (5)'
+        elif hasattr(WD_ALIGN_PARAGRAPH, 'JUSTIFY_MED') and alignment == WD_ALIGN_PARAGRAPH.JUSTIFY_MED:
+            return '两端对齐(中等)', 'JUSTIFY_MED (6)'
+        elif hasattr(WD_ALIGN_PARAGRAPH, 'JUSTIFY_HI') and alignment == WD_ALIGN_PARAGRAPH.JUSTIFY_HI:
+            return '两端对齐(高)', 'JUSTIFY_HI (7)'
+        elif hasattr(WD_ALIGN_PARAGRAPH, 'JUSTIFY_LOW') and alignment == WD_ALIGN_PARAGRAPH.JUSTIFY_LOW:
+            return '两端对齐(低)', 'JUSTIFY_LOW (8)'
+    except Exception:
+        pass
+    
+    # 如果枚举值比较失败，尝试数字值比较
+    try:
+        alignment_int = int(alignment)
+        alignment_map = {
+            0: ('左对齐', 'LEFT (0)'),
+            1: ('居中', 'CENTER (1)'),
+            2: ('右对齐', 'RIGHT (2)'),
+            3: ('两端对齐', 'JUSTIFY (3)'),
+            4: ('分散对齐', 'DISTRIBUTE (4)'),
+            5: ('泰文两端对齐', 'THAI_JUSTIFY (5)'),
+            6: ('两端对齐(中等)', 'JUSTIFY_MED (6)'),
+            7: ('两端对齐(高)', 'JUSTIFY_HI (7)'),
+            8: ('两端对齐(低)', 'JUSTIFY_LOW (8)')
+        }
+        
+        if alignment_int in alignment_map:
+            return alignment_map[alignment_int]
+    except (ValueError, TypeError):
+        pass
+    
+    # 最后尝试字符串匹配
+    alignment_str = str(alignment)
+    string_map = {
+        'CENTER (1)': ('居中', 'CENTER (1)'),
+        'LEFT (0)': ('左对齐', 'LEFT (0)'), 
+        'RIGHT (2)': ('右对齐', 'RIGHT (2)'),
+        'JUSTIFY (3)': ('两端对齐', 'JUSTIFY (3)'),
+        'DISTRIBUTE (4)': ('分散对齐', 'DISTRIBUTE (4)'),
+        'THAI_JUSTIFY (5)': ('泰文两端对齐', 'THAI_JUSTIFY (5)'),
+        'JUSTIFY_MED (6)': ('两端对齐(中等)', 'JUSTIFY_MED (6)'),
+        'JUSTIFY_HI (7)': ('两端对齐(高)', 'JUSTIFY_HI (7)'),
+        'JUSTIFY_LOW (8)': ('两端对齐(低)', 'JUSTIFY_LOW (8)')
+    }
+    
+    if alignment_str in string_map:
+        return string_map[alignment_str]
+    
+    # 如果都不匹配，返回原始值
+    return f'未知对齐方式({alignment_str})', str(alignment)
 
 class Node:
-    def __init__(self, node_type, content, font=None, size=None, bold=False, spacing=None, line_spacing=None, indentation=None, outline_level=None, alignment=None, direction=None, paragraph_format=None):
-        self.type = node_type  # e.g., 'heading1', 'heading2', 'paragraph'
+    def __init__(self, node_type, content, font=None, size=None, bold=False, paragraph_format=None):
+        self.type = node_type  # e.g., 'document_title', 'heading1', 'paragraph', 'list_item', etc.
         self.content = content
+        # 字体信息
         self.font = font
         self.size = size  # in pt
-        self.font_size_name = pt_to_font_size(size) if size else None  # 字号
+        self.font_size_name = pt_to_font_size(size) if size else None  # 字号名称
         self.bold = bold
-        self.spacing = spacing  # paragraph spacing after, in pt
-        self.line_spacing = line_spacing  # line spacing in pt
-        self.indentation = indentation  # indentation information
-        self.outline_level = outline_level  # outline level from Word
-        self.alignment = alignment  # paragraph alignment
-        self.direction = direction  # text direction
-        self.paragraph_format = paragraph_format  # complete paragraph format info
+        # 完整格式信息（包含所有段落格式）
+        self.paragraph_format = paragraph_format or {}
         self.children = []  # list of child nodes
 
     def add_child(self, child_node):
         self.children.append(child_node)
+    
+    # 属性访问器 - 通过paragraph_format获取格式信息
+    @property
+    def spacing(self):
+        """段后间距"""
+        return self.paragraph_format.get('space_after', {}).get('value', 0)
+    
+    @property 
+    def line_spacing(self):
+        """行距"""
+        line_spacing_info = self.paragraph_format.get('line_spacing', {})
+        return line_spacing_info.get('value') if isinstance(line_spacing_info, dict) else None
+    
+    @property
+    def indentation(self):
+        """缩进信息"""
+        indent_info = {}
+        if 'left_indent' in self.paragraph_format:
+            indent_info['left'] = self.paragraph_format['left_indent']
+        if 'right_indent' in self.paragraph_format:
+            indent_info['right'] = self.paragraph_format['right_indent']
+        if 'first_line_indent' in self.paragraph_format:
+            indent_info['first_line'] = self.paragraph_format['first_line_indent']
+        if 'hanging_indent' in self.paragraph_format:
+            indent_info['hanging'] = self.paragraph_format['hanging_indent']
+        return indent_info
+    
+    @property
+    def outline_level(self):
+        """大纲级别"""
+        return self.paragraph_format.get('outline_level')
+    
+    @property
+    def alignment(self):
+        """对齐方式"""
+        return self.paragraph_format.get('alignment')
+    
+    @property
+    def direction(self):
+        """文字方向"""
+        return self.paragraph_format.get('direction')
 
     def to_dict(self):
         return {
@@ -79,8 +261,9 @@ class Node:
             'content': self.content,
             'font': self.font,
             'size': self.size,
-            'font_size_name': self.font_size_name,  # 字号
+            'font_size_name': self.font_size_name,
             'bold': self.bold,
+            # 保持向后兼容，同时提供属性访问
             'spacing': self.spacing,
             'line_spacing': self.line_spacing,
             'indentation': self.indentation,
@@ -102,84 +285,7 @@ def get_font_size_distribution(doc):
         sizes.append(size)
     return sizes
 
-def get_alignment_from_xml(paragraph):
-    """尝试从XML中直接获取对齐方式"""
-    try:
-        # 获取段落的XML元素
-        p_element = paragraph._element
-        
-        # 查找段落属性
-        pPr = p_element.find('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPr')
-        if pPr is not None:
-            # 查找对齐方式元素
-            jc = pPr.find('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}jc')
-            if jc is not None:
-                val = jc.get('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val')
-                if val:
-                    # XML中的对齐方式值映射
-                    xml_alignment_map = {
-                        'left': '左对齐',
-                        'center': '居中',
-                        'right': '右对齐',
-                        'both': '两端对齐',
-                        'justify': '两端对齐',
-                        'distribute': '分散对齐',
-                        'start': '左对齐',
-                        'end': '右对齐'
-                    }
-                    return xml_alignment_map.get(val, f'XML对齐方式({val})')
-        
-        return '左对齐'  # XML中没有找到时的默认值
-        
-    except Exception as e:
-        print(f"从XML获取对齐方式时出错: {e}")
-        return '左对齐'
-
-def get_alignment_info(pf, paragraph):
-    """获取段落对齐方式的修复版本"""
-    # 完整的对齐方式映射（只包含python-docx实际支持的）
-    alignment_map = {
-        0: '左对齐',           # WD_ALIGN_PARAGRAPH.LEFT
-        1: '居中',            # WD_ALIGN_PARAGRAPH.CENTER  
-        2: '右对齐',          # WD_ALIGN_PARAGRAPH.RIGHT
-        3: '两端对齐',        # WD_ALIGN_PARAGRAPH.JUSTIFY
-        4: '分散对齐',        # WD_ALIGN_PARAGRAPH.DISTRIBUTE (如果存在)
-        7: '泰文两端对齐'     # WD_ALIGN_PARAGRAPH.THAI_JUSTIFY (如果存在)
-    }
-    
-    # 尝试多种方法获取对齐方式
-    alignment_value = None
-    alignment_name = '未知'
-    
-    try:
-        # 方法1：直接获取alignment属性
-        if hasattr(pf, 'alignment') and pf.alignment is not None:
-            alignment_value = pf.alignment
-            # 如果是枚举对象，获取其数值
-            if hasattr(alignment_value, 'value'):
-                alignment_numeric = alignment_value.value
-            else:
-                alignment_numeric = int(alignment_value) if alignment_value is not None else None
-            
-            if alignment_numeric is not None:
-                alignment_name = alignment_map.get(alignment_numeric, f'未知对齐方式({alignment_numeric})')
-            else:
-                alignment_name = '左对齐'  # 默认值
-        else:
-            # 方法2：尝试通过XML直接读取
-            alignment_name = get_alignment_from_xml(paragraph)
-            
-    except Exception as e:
-        print(f"获取对齐方式时出错: {e}")
-        alignment_name = '左对齐'  # 出错时的默认值
-    
-    return {
-        'type': '对齐方式',
-        'value': alignment_name,
-        'raw_value': str(alignment_value) if alignment_value is not None else 'None'
-    }
-
-def extract_paragraph_formatting(paragraph):
+def extract_paragraph_formatting(paragraph, font_name="Default", font_size=12):
     """Extract detailed formatting information from paragraph including all properties from the dialog."""
     format_info = {}
     
@@ -187,13 +293,26 @@ def extract_paragraph_formatting(paragraph):
     pf = paragraph.paragraph_format
     
     # 1. 常规 (General) Section
-    # Alignment (对齐方式) - 使用修复后的函数
-    format_info['alignment'] = get_alignment_info(pf, paragraph)
+    # Alignment (对齐方式) - 修复后的逻辑
+    alignment_value, alignment_raw = get_alignment_value(pf.alignment)
+    format_info['alignment'] = {
+            'type': '对齐方式',
+        'value': alignment_value,
+        'raw_value': alignment_raw
+        }
     
     # Outline Level (大纲级别)
     outline_map = {
-        0: '标题1', 1: '标题2', 2: '标题3', 3: '标题4', 4: '标题5',
-        5: '标题6', 6: '标题7', 7: '标题8', 8: '标题9', 9: '正文文本'
+        0: '标题1',
+        1: '标题2', 
+        2: '标题3',
+        3: '标题4',
+        4: '标题5',
+        5: '标题6',
+        6: '标题7',
+        7: '标题8',
+        8: '标题9',
+        9: '正文文本'
     }
     
     if hasattr(pf, 'outline_level') and pf.outline_level is not None:
@@ -217,63 +336,127 @@ def extract_paragraph_formatting(paragraph):
     }
     
     # 2. 缩进 (Indentation) Section
-    # 文本之前 (Before text) - 左缩进
-    if pf.left_indent:
-        value, unit_name, unit_code = get_measurement_info(pf.left_indent)
-        format_info['left_indent'] = {
-            'type': '左缩进',
-            'value': value,
-            'unit': unit_name,
-            'unit_code': unit_code
-        }
-    else:
-        format_info['left_indent'] = {
-            'type': '左缩进',
+    def get_indent_info(indent_value, indent_type, font_size=12, font_name="Default"):
+        """获取缩进信息，根据实际字体和字号转换为中文字符单位"""
+        if indent_value is None:
+            return {
+                'type': indent_type,
             'value': 0,
-            'unit': '磅',
-            'unit_code': 'pt'
+                'unit': '字',
+                'unit_code': 'char',
+                'display_text': '0字',
+                'pt_value': 0,
+                'font_size': font_size,
+                'font_name': font_name,
+                'conversion_ratio': '无缩进',
+                'raw_value': None
+            }
+        
+        # 获取磅值
+        pt_value, _, _ = get_measurement_info(indent_value)
+        
+        # 根据实际字体和字号进行字符转换
+        char_value = pt_to_char_accurate(pt_value, font_size, font_name)
+        
+        # 格式化显示，如果是整数就不显示小数点
+        if char_value == int(char_value):
+            display_value = int(char_value)
+        else:
+            display_value = char_value
+        
+        # 计算实际的字符宽度用于显示
+        actual_char_width = calculate_char_width(font_size, font_name)
+        
+        return {
+            'type': indent_type,
+            'value': display_value,
+            'unit': '字',
+            'unit_code': 'char',
+            'display_text': format_char_value(display_value),  # 中文显示格式
+            'pt_value': pt_value,  # 保留原始磅值用于参考
+            'font_size': font_size,
+            'font_name': font_name,
+            'char_width': round(actual_char_width, 1),  # 基于字体字号的字符宽度
+            'conversion_ratio': f'1字={actual_char_width:.1f}磅({font_name},{font_size}号)',
+            'raw_value': indent_value
         }
     
-    # 文本之后 (After text) - 右缩进
-    if pf.right_indent:
-        value, unit_name, unit_code = get_measurement_info(pf.right_indent)
-        format_info['right_indent'] = {
-            'type': '右缩进',
-            'value': value,
-            'unit': unit_name,
-            'unit_code': unit_code
-        }
-    else:
-        format_info['right_indent'] = {
-            'type': '右缩进',
-            'value': 0,
-            'unit': '磅',
-            'unit_code': 'pt'
-        }
+    # 左缩进
+    format_info['left_indent'] = get_indent_info(pf.left_indent, '左缩进', font_size, font_name)
     
-    # 特殊格式 (Special) - 首行缩进
+    # 右缩进
+    format_info['right_indent'] = get_indent_info(pf.right_indent, '右缩进', font_size, font_name)
+    
+    # 首行缩进/悬挂缩进
     if pf.first_line_indent:
-        value, unit_name, unit_code = get_measurement_info(pf.first_line_indent)
-        if value > 0:
+        pt_value, _, _ = get_measurement_info(pf.first_line_indent)
+        
+        # 根据实际字体和字号进行字符转换
+        char_value = pt_to_char_accurate(pt_value, font_size, font_name)
+        actual_char_width = calculate_char_width(font_size, font_name)
+        
+        # 格式化显示值
+        if char_value == int(char_value):
+            display_value = int(char_value)
+        else:
+            display_value = char_value
+        
+        if pt_value > 0:
             format_info['first_line_indent'] = {
                 'type': '首行缩进',
-                'value': value,
-                'unit': unit_name,
-                'unit_code': unit_code
+                'value': display_value,
+                'unit': '字',
+                'unit_code': 'char',
+                'display_text': format_char_value(display_value),
+                'pt_value': pt_value,
+                'font_size': font_size,
+                'font_name': font_name,
+                'char_width': round(actual_char_width, 1),
+                'conversion_ratio': f'1字={actual_char_width:.1f}磅({font_name},{font_size}号)',
+                'raw_value': pf.first_line_indent
             }
-        elif value < 0:
+        elif pt_value < 0:
             format_info['hanging_indent'] = {
                 'type': '悬挂缩进',
-                'value': abs(value),
-                'unit': unit_name,
-                'unit_code': unit_code
+                'value': abs(display_value),
+                'unit': '字',
+                'unit_code': 'char',
+                'display_text': format_char_value(abs(display_value)),
+                'pt_value': abs(pt_value),
+                'font_size': font_size,
+                'font_name': font_name,
+                'char_width': round(actual_char_width, 1),
+                'conversion_ratio': f'1字={actual_char_width:.1f}磅({font_name},{font_size}号)',
+                'raw_value': pf.first_line_indent
+            }
+        else:
+            format_info['first_line_indent'] = {
+                'type': '首行缩进',
+                'value': 0,
+                'unit': '字',
+                'unit_code': 'char',
+                'display_text': '0字',
+                'pt_value': 0,
+                'font_size': font_size,
+                'font_name': font_name,
+                'char_width': round(actual_char_width, 1),
+                'conversion_ratio': f'1字={actual_char_width:.1f}磅({font_name},{font_size}号)',
+                'raw_value': pf.first_line_indent
             }
     else:
+        default_char_width = calculate_char_width(font_size, font_name)
         format_info['first_line_indent'] = {
             'type': '首行缩进',
             'value': 0,
-            'unit': '磅',
-            'unit_code': 'pt'
+            'unit': '字',
+            'unit_code': 'char',
+            'display_text': '0字',
+            'pt_value': 0,
+            'font_size': font_size,
+            'font_name': font_name,
+            'char_width': round(default_char_width, 1),
+            'conversion_ratio': f'1字={default_char_width:.1f}磅({font_name},{font_size}号)',
+            'raw_value': None
         }
     
     # 3. 间距 (Spacing) Section
@@ -312,221 +495,276 @@ def extract_paragraph_formatting(paragraph):
         }
     
     # 行距 (Line spacing) - 处理不同类型的行距
-    line_spacing_rule_map = {
-        WD_LINE_SPACING.SINGLE: '单倍行距',
-        WD_LINE_SPACING.ONE_POINT_FIVE: '1.5倍行距',
-        WD_LINE_SPACING.DOUBLE: '2倍行距',
-        WD_LINE_SPACING.AT_LEAST: '最小值',
-        WD_LINE_SPACING.EXACTLY: '固定值',
-        WD_LINE_SPACING.MULTIPLE: '多倍行距'
-    }
-    
-    if pf.line_spacing:
-        if hasattr(pf, 'line_spacing_rule') and pf.line_spacing_rule is not None:
-            rule_name = line_spacing_rule_map.get(pf.line_spacing_rule, str(pf.line_spacing_rule))
+    def get_line_spacing_info(paragraph_format):
+        """获取行距信息"""
+        try:
+            line_spacing = paragraph_format.line_spacing
+            line_spacing_rule = paragraph_format.line_spacing_rule
             
-            if pf.line_spacing_rule in [WD_LINE_SPACING.SINGLE, WD_LINE_SPACING.ONE_POINT_FIVE, WD_LINE_SPACING.DOUBLE, WD_LINE_SPACING.MULTIPLE]:
-                # 倍数行距
-                format_info['line_spacing'] = {
+            # 行距规则映射
+            rule_map = {
+                0: ('单倍行距', 'SINGLE'),      # WD_LINE_SPACING.SINGLE
+                1: ('1.5倍行距', 'ONE_POINT_FIVE'),  # WD_LINE_SPACING.ONE_POINT_FIVE  
+                2: ('2倍行距', 'DOUBLE'),        # WD_LINE_SPACING.DOUBLE
+                3: ('最小值', 'AT_LEAST'),       # WD_LINE_SPACING.AT_LEAST
+                4: ('固定值', 'EXACTLY'),        # WD_LINE_SPACING.EXACTLY
+                5: ('多倍行距', 'MULTIPLE')      # WD_LINE_SPACING.MULTIPLE
+            }
+            
+            if line_spacing is None and line_spacing_rule is None:
+                return {
                     'type': '行距',
-                    'rule': rule_name,
-                    'value': pf.line_spacing,
+                    'rule': '单倍行距',
+                    'value': 1.0,
                     'unit': '倍数',
-                    'unit_code': 'multiple'
+                    'unit_code': 'multiple',
+                    'raw_rule': None,
+                    'raw_value': None
+                }
+            
+            # 获取规则名称
+            if line_spacing_rule is not None:
+                rule_int = int(line_spacing_rule) if isinstance(line_spacing_rule, int) else line_spacing_rule
+                rule_name, rule_code = rule_map.get(rule_int, ('未知规则', str(line_spacing_rule)))
+            else:
+                rule_name, rule_code = '自动', 'AUTO'
+            
+            # 处理行距值
+            if line_spacing is not None:
+                # 对于倍数行距（SINGLE, ONE_POINT_FIVE, DOUBLE, MULTIPLE）
+                if line_spacing_rule in [0, 1, 2, 5]:  # SINGLE, ONE_POINT_FIVE, DOUBLE, MULTIPLE
+                    if line_spacing_rule == 0:  # SINGLE
+                        value = 1.0
+                    elif line_spacing_rule == 1:  # ONE_POINT_FIVE
+                        value = 1.5
+                    elif line_spacing_rule == 2:  # DOUBLE
+                        value = 2.0
+                    else:  # MULTIPLE
+                        # 对于多倍行距，line_spacing就是倍数
+                        value = round(float(line_spacing), 2)
+                    
+                    return {
+                        'type': '行距',
+                        'rule': rule_name,
+                        'value': value,
+                        'unit': '倍数',
+                        'unit_code': 'multiple',
+                        'raw_rule': line_spacing_rule,
+                        'raw_value': line_spacing
+                    }
+                
+                # 对于固定值和最小值（EXACTLY, AT_LEAST）
+                elif line_spacing_rule in [3, 4]:  # AT_LEAST, EXACTLY
+                    # line_spacing是Length对象，需要转换
+                    value, unit_name, unit_code = get_measurement_info(line_spacing)
+                    return {
+                        'type': '行距',
+                        'rule': rule_name,
+                        'value': value,
+                        'unit': unit_name,
+                        'unit_code': unit_code,
+                        'raw_rule': line_spacing_rule,
+                        'raw_value': line_spacing
+                    }
+                else:
+                    # 其他情况，尝试作为倍数处理
+                    try:
+                        value = round(float(line_spacing), 2)
+                        return {
+                            'type': '行距',
+                            'rule': rule_name,
+                            'value': value,
+                            'unit': '倍数',
+                            'unit_code': 'multiple',
+                            'raw_rule': line_spacing_rule,
+                            'raw_value': line_spacing
+                        }
+                    except (TypeError, ValueError):
+                        # 如果无法转换为数字，尝试作为Length处理
+                        value, unit_name, unit_code = get_measurement_info(line_spacing)
+                        return {
+                            'type': '行距',
+                            'rule': rule_name,
+                            'value': value,
+                            'unit': unit_name,
+                            'unit_code': unit_code,
+                            'raw_rule': line_spacing_rule,
+                            'raw_value': line_spacing
                 }
             else:
-                # 固定值或最小值
-                value, unit_name, unit_code = get_measurement_info(pf.line_spacing)
-                format_info['line_spacing'] = {
+                # 只有规则没有值的情况
+                default_values = {
+                    0: 1.0,   # SINGLE
+                    1: 1.5,   # ONE_POINT_FIVE
+                    2: 2.0,   # DOUBLE
+                }
+                value = default_values.get(line_spacing_rule, 1.0)
+                return {
                     'type': '行距',
                     'rule': rule_name,
                     'value': value,
-                    'unit': unit_name,
-                    'unit_code': unit_code
+                    'unit': '倍数',
+                    'unit_code': 'multiple',
+                    'raw_rule': line_spacing_rule,
+                    'raw_value': line_spacing
                 }
-        else:
-            # 如果没有行距规则，尝试获取数值和单位
-            value, unit_name, unit_code = get_measurement_info(pf.line_spacing)
-            format_info['line_spacing'] = {
-                'type': '行距',
-                'rule': '固定值',
-                'value': value,
-                'unit': unit_name,
-                'unit_code': unit_code
-            }
-    else:
-        format_info['line_spacing'] = {
+                
+        except Exception as e:
+            # 异常处理，返回默认值
+            return {
             'type': '行距',
             'rule': '单倍行距',
             'value': 1.0,
             'unit': '倍数',
-            'unit_code': 'multiple'
+                'unit_code': 'multiple',
+                'raw_rule': None,
+                'raw_value': None,
+                'error': str(e)
         }
+    
+    format_info['line_spacing'] = get_line_spacing_info(pf)
     
     return format_info
 
-def infer_heading_level(content, font, size, bold, outline_level):
-    """Improved heading level inference based on content patterns and formatting."""
-    
-    # Check for Chinese numbering patterns
-    content_stripped = content.strip()
-    
-    # Level 1: "一、", "二、", "三、" etc.
-    if content_stripped and content_stripped[0] in '一二三四五六七八九十' and '、' in content_stripped[:3]:
-        return 'heading1'
-    
-    # Level 2: "（一）", "（二）" etc.
-    if content_stripped.startswith('（') and content_stripped[1] in '一二三四五六七八九十' and '）' in content_stripped:
-        return 'heading2'
-    
-    # Level 3: "1.", "2." etc.
-    if content_stripped and content_stripped[0].isdigit() and '.' in content_stripped[:3]:
-        return 'heading3'
-    
-    # Level 4: "（1）", "（2）" etc.
-    if content_stripped.startswith('（') and content_stripped[1].isdigit() and '）' in content_stripped:
-        return 'heading4'
-    
-    # Check outline level from Word
-    if outline_level and outline_level.get('value') != '正文文本':
-        outline_value = outline_level.get('value', '')
-        if outline_value == '标题1':
-            return 'heading1'
-        elif outline_value == '标题2':
-            return 'heading2'
-        elif outline_value == '标题3':
-            return 'heading3'
-        elif outline_value == '标题4':
-            return 'heading4'
-    
-    # Check font characteristics
-    if bold and size >= 16:
-        return 'heading1'
-    elif bold and size >= 14:
-        return 'heading2'
-    elif bold and size >= 12:
-        return 'heading3'
-    
-    return 'paragraph'
-
-def parse_docx_to_tree(file_path):
+def parse_docx_to_tree(file_path, api_key: str = None):
+    """解析Word文档为树形结构，使用AI分类器"""
     doc = Document(file_path)
     root = Node('root', 'Document Root')
     stack = [root]
     
-    # Step 1: Collect font size distribution
-    size_distribution = get_font_size_distribution(doc)
+    # 创建AI节点分类器
+    classifier = create_classifier(api_key)
+    
+    # 收集所有段落用于上下文分析（包括空行）
+    all_paragraphs = []
+    for paragraph in doc.paragraphs:
+        all_paragraphs.append(paragraph)
     
     # Step 2: Parse paragraphs and build tree
-    for paragraph in doc.paragraphs:
-        if not paragraph.text.strip():  # Skip empty paragraphs
-            continue
+    for i, paragraph in enumerate(all_paragraphs):
         
-        # Extract properties
-        first_run = paragraph.runs[0] if paragraph.runs else None
-        font = first_run.font.name if first_run and first_run.font.name else 'Default'
-        size = first_run.font.size.pt if first_run and first_run.font.size else 12.0
-        bold = first_run.font.bold if first_run and first_run.font.bold else False
-        
-        # Get paragraph formatting
-        format_info = extract_paragraph_formatting(paragraph)
-        
-        # 处理间距信息
-        spacing_info = format_info.get('space_after', {})
-        spacing = spacing_info.get('value', 0.0) if isinstance(spacing_info, dict) else 0.0
-        
-        # 处理行距信息
-        line_spacing_info = format_info.get('line_spacing', {})
-        line_spacing = line_spacing_info.get('value', None) if isinstance(line_spacing_info, dict) else None
-        
-        # Get outline level
-        outline_level = format_info.get('outline_level', None)
-        
-        # Get alignment
-        alignment = format_info.get('alignment', None)
-        
-        # Get direction
-        direction = format_info.get('direction', None)
-        
-        # Infer node type based on content and formatting
-        node_type = infer_heading_level(paragraph.text, font, size, bold, outline_level)
+        # 检查是否为空行
         content = paragraph.text.strip()
+        is_empty_line = not content
         
-        # Create indentation info
-        indentation = {}
-        if 'left_indent' in format_info:
-            indentation['left'] = format_info['left_indent']
-        if 'right_indent' in format_info:
-            indentation['right'] = format_info['right_indent']
-        if 'first_line_indent' in format_info:
-            indentation['first_line'] = format_info['first_line_indent']
-        if 'hanging_indent' in format_info:
-            indentation['hanging'] = format_info['hanging_indent']
-        
-        new_node = Node(
-            node_type, content, font, size, bold, spacing, 
-            line_spacing, indentation, outline_level, alignment, direction, format_info
-        )
+        if is_empty_line:
+            # 为空行创建特殊节点，使用默认字体信息
+            format_info = extract_paragraph_formatting(paragraph, "Default", 12.0)
+            
+            # 创建空行节点
+            node_type = 'empty_line'
+            font = 'Default'
+            size = 12.0
+            bold = False
+            
+            new_node = Node(
+                node_type, '[空行]', font, size, bold, format_info
+            )
+        else:
+            # 处理非空行
+            # Extract properties
+            first_run = paragraph.runs[0] if paragraph.runs else None
+            font = first_run.font.name if first_run and first_run.font.name else 'Default'
+            size = first_run.font.size.pt if first_run and first_run.font.size else 12.0
+            bold = first_run.font.bold if first_run and first_run.font.bold else False
+            
+            # Get paragraph formatting，传入实际的字体和字号信息
+            format_info = extract_paragraph_formatting(paragraph, font, size)
+            
+            # 获取上下文节点（前3个段落，只包含非空行）
+            context_nodes = []
+            for j in range(max(0, i-3), i):
+                if j < len(all_paragraphs) and all_paragraphs[j].text.strip():
+                    context_nodes.append({
+                        'content': all_paragraphs[j].text.strip(),
+                        'type': 'paragraph'  # 临时类型
+                    })
+            
+            # 使用AI分类器
+            node_type = classifier.classify_node(
+                content=content,
+                font=font,
+                size=size,
+                bold=bold,
+                outline_level=format_info.get('outline_level'),
+                alignment=format_info.get('alignment'),
+                paragraph_format=format_info,
+                context_nodes=context_nodes
+            )
+            
+            new_node = Node(
+                node_type, content, font, size, bold, format_info
+            )
         
         # Build tree: Adjust stack based on level
-        current_level = {'heading1': 1, 'heading2': 2, 'heading3': 3, 'heading4': 4, 'paragraph': 5}.get(node_type, 5)
-        while len(stack) > 1 and current_level <= {'heading1': 1, 'heading2': 2, 'heading3': 3, 'heading4': 4, 'paragraph': 5}.get(stack[-1].type, 5):
+        # 更新层级映射，包含所有支持的节点类型
+        level_map = {
+            'document_title': 0,  # 发文标题层级最高
+            'addressee': 1,       # 主送机关
+            'heading1': 2,        # 一级标题
+            'heading2': 3,        # 二级标题  
+            'heading3': 4,        # 三级标题
+            'heading4': 5,        # 四级标题
+            'list_item': 6,       # 列表项
+            'paragraph': 7,       # 普通段落
+            'ending': 8,          # 结尾
+            'signature': 9,       # 落款
+            'attachment': 10,     # 附件
+            'separator': 11,      # 分隔符
+            'empty_line': 12      # 空行层级最低，不影响文档结构
+        }
+        
+        current_level = level_map.get(node_type, 6)
+        while len(stack) > 1 and current_level <= level_map.get(stack[-1].type, 6):
             stack.pop()
         stack[-1].add_child(new_node)
         stack.append(new_node)
     
     return root
 
-# Print as tree string
-def print_tree(node, indent=0):
-    spacing_info = f"spacing={node.spacing}" if node.spacing else ""
-    line_spacing_info = f"line_spacing={node.line_spacing}" if node.line_spacing else ""
-    indent_info = f"indent={node.indentation}" if node.indentation else ""
-    alignment_info = f"alignment={node.alignment['value'] if node.alignment else 'None'}"
-    outline_info = f"outline={node.outline_level['value'] if node.outline_level else 'None'}"
-    font_size_info = f"字号={node.font_size_name}" if node.font_size_name else ""
-    
-    info_parts = [f"font={node.font}", f"size={node.size}pt", f"bold={node.bold}"]
-    if font_size_info:
-        info_parts.append(font_size_info)
-    if spacing_info:
-        info_parts.append(spacing_info)
-    if line_spacing_info:
-        info_parts.append(line_spacing_info)
-    if indent_info:
-        info_parts.append(indent_info)
-    if alignment_info:
-        info_parts.append(alignment_info)
-    if outline_info:
-        info_parts.append(outline_info)
-    
-    info_str = ", ".join(info_parts)
-    print('  ' * indent + f"{node.type}: {node.content} ({info_str})")
-    for child in node.children:
-        print_tree(child, indent + 1)
-
 # Example usage
 if __name__ == "__main__":
-    file_path = '1.docx'  # Replace with your file path
+    file_path = 'example.docx'  # Replace with your file path
+    
+    # 解析文档
     tree_root = parse_docx_to_tree(file_path)
 
     # Print tree as JSON
-    print("正在生成JSON输出...")
-    json_output = json.dumps(tree_root.to_dict(), indent=4, ensure_ascii=False)
-    
-    # Save to JSON file
-    with open('tree_output.json', 'w', encoding='utf-8') as f:
-        f.write(json_output)
-    
-    print("JSON文件已保存为 'tree_output.json'")
-    
-    # Print tree structure
+    print(json.dumps(tree_root.to_dict(), indent=4, ensure_ascii=False))
+
+    # Print as tree string
+    def print_tree(node, indent=0):
+        spacing_info = f"spacing={node.spacing}" if node.spacing else ""
+        line_spacing_info = f"line_spacing={node.line_spacing}" if node.line_spacing else ""
+        indent_info = f"indent={node.indentation}" if node.indentation else ""
+        alignment_info = f"alignment={node.alignment}" if node.alignment else ""
+        outline_info = f"outline={node.outline_level}" if node.outline_level else ""
+        font_size_info = f"字号={node.font_size_name}" if node.font_size_name else ""
+        
+        info_parts = [f"font={node.font}", f"size={node.size}pt", f"bold={node.bold}"]
+        if font_size_info:
+            info_parts.append(font_size_info)
+        if spacing_info:
+            info_parts.append(spacing_info)
+        if line_spacing_info:
+            info_parts.append(line_spacing_info)
+        if indent_info:
+            info_parts.append(indent_info)
+        if alignment_info:
+            info_parts.append(alignment_info)
+        if outline_info:
+            info_parts.append(outline_info)
+        
+        info_str = ", ".join(info_parts)
+        print('  ' * indent + f"{node.type}: {node.content} ({info_str})")
+        for child in node.children:
+            print_tree(child, indent + 1)
+
     print("\n" + "="*50)
     print("TREE STRUCTURE:")
     print("="*50)
     print_tree(tree_root)
-    
-    print(f"\n解析完成! JSON文件已保存。")
-    print(f"共解析了 {len([n for n in tree_root.children])} 个顶级节点。")
-   
-    check_file('tree_output.json')
+
+    # Save to JSON file
+    with open('tree_output.json', 'w', encoding='utf-8') as f:
+        json.dump(tree_root.to_dict(), f, ensure_ascii=False, indent=4)

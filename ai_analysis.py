@@ -62,7 +62,11 @@ class DeepSeekAnalyzer:
     -页眉页脚
     -加载两分割线之间的，且可能为落款的内容部分
     
-    
+输出审查结果，如果审查结果为不符合要求，则需要给出具体原因和建议。输出格式如下：
+审查结果：通过|不通过
+不通过原因：XXX
+修改建议：XXX
+
 
 请用中文回答，格式要清晰易读。"""
 
@@ -135,10 +139,20 @@ class DeepSeekAnalyzer:
 {context}
 
 请从以下几个方面进行分析：
-1. 节点类型识别（是否为拟稿部门、日期等）
-2. 格式合规性检查（字体、字号、对齐、缩进等）
-3. 位置关系检查（是否符合文档结构要求）
-4. 具体问题描述和建议
+0. 节点类型识别（是否为拟稿部门、日期等）
+1. 格式合规性检查（字体、字号、对齐、缩进等）
+2. 位置关系检查（是否符合文档结构要求）
+3. 对以下内容需要忽略分析：
+    -分割线
+    -页眉页脚
+    -加载两分割线之间的，且可能为落款的内容部分
+
+
+输出格式：
+    审查结果：通过|不通过
+    不通过原因：XXX
+    修改建议：XXX
+
 
 请用中文回答，格式要清晰易读。"""
 
@@ -176,6 +190,15 @@ class DeepSeekAnalyzer:
         """根据全局变量控制是否使用流式输出"""
         if ENABLE_STREAMING:
             print("\n=== 开始流式分析 ===")
+            # 打印节点内容（最长30个字符），蓝色
+            content_to_print = node_info
+            if isinstance(node_info, dict) and 'content' in node_info:
+                content_to_print = node_info['content']
+            elif hasattr(node_info, 'content'):
+                content_to_print = node_info.content
+            # 截取前30个字符
+            short_content = str(content_to_print)[:30]
+            print(f"\033[34m节点内容: {short_content}\033[0m")
             full_response = ""
             for chunk in self.analyze_node_streaming(node_info, context, format_requirements):
                 full_response += chunk
@@ -207,6 +230,71 @@ class DeepSeekAnalyzer:
                 time.sleep(delay)
         
         return results
+    
+    def analyze_batch_nodes(self, nodes: list, context: str, format_requirements: str) -> str:
+        """分析一批相邻节点（作为一个整体）"""
+        
+        # 构建批量节点信息
+        batch_info = "=== 批量节点分析 ===\n"
+        batch_info += f"节点数量: {len(nodes)}\n\n"
+        
+        for i, node in enumerate(nodes):
+            batch_info += f"批量节点{i+1}:\n"
+            batch_info += f"  内容: {node.content}\n"
+            batch_info += f"  类型: {node.type}\n"
+            batch_info += f"  字体: {node.font}\n"
+            batch_info += f"  字号: {node.font_size_name} ({node.size}pt)\n"
+            batch_info += f"  加粗: {node.bold}\n"
+            if node.alignment:
+                batch_info += f"  对齐: {node.alignment.get('value')}\n"
+            if node.paragraph_format:
+                pf = node.paragraph_format
+                batch_info += f"  首行缩进: {pf.get('first_line_indent', {}).get('value', 0)}\n"
+                batch_info += f"  左缩进: {pf.get('left_indent', {}).get('value', 0)}\n"
+            batch_info += "\n"
+        
+        prompt = f"""你是一个专业的文档格式检查专家。请分析以下批量节点的格式是否符合要求。
+
+文档格式要求：
+{format_requirements}
+
+{context}
+
+批量节点信息：
+{batch_info}
+
+请逐个分析每个批量节点的格式问题，并提供改进建议。在分析结果中请明确标注每个节点的分析内容（如：批量节点1: xxx, 批量节点2: xxx）。
+"""
+
+        payload = {
+            "model": "deepseek-chat",
+            "messages": [
+                {
+                    "role": "user", 
+                    "content": prompt
+                }
+            ],
+            "temperature": 0.3,
+            "max_tokens": 4000,
+            "stream": False
+        }
+        
+        try:
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload,
+                timeout=60
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content']
+            else:
+                return f"批量分析失败: {response.status_code} - {response.text}"
+                
+        except Exception as e:
+            return f"批量分析出错: {str(e)}"
 
 class DocumentAnalyzer:
     """文档分析器 - 整合节点处理和AI分析"""
@@ -281,9 +369,13 @@ class DocumentAnalyzer:
             })
         
         return self.analyzer.analyze_batch(nodes_data, format_requirements)
+    
+    def analyze_batch_nodes(self, nodes: list, context: str, format_requirements: str) -> str:
+        """批量分析相邻节点"""
+        return self.analyzer.analyze_batch_nodes(nodes, context, format_requirements)
 
 # 配置常量
-DEEPSEEK_API_KEY = "your_api_key_here"  # 请替换为您的API密钥
+DEEPSEEK_API_KEY = "sk-908c59db6a72469d9dcbd3607a9e2338"  # 请替换为您的API密钥
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 def create_analyzer(api_key: str = None) -> Optional[DocumentAnalyzer]:

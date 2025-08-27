@@ -6,8 +6,11 @@ from dataclasses import dataclass
 from ai_analysis import create_analyzer
 
 # 全局变量：控制上下文范围
-CONTEXT_BEFORE_NODES = 5  # 前N个节点
-CONTEXT_AFTER_NODES = 5   # 后M个节点
+CONTEXT_BEFORE_NODES = 5  # 前A个节点
+CONTEXT_AFTER_NODES = 5   # 后B个节点
+
+# 全局变量：控制批量分析
+BATCH_SIZE = 5  # 一次性分析的相邻节点数N，默认为1（单节点分析）
 
 # 格式要求定义
 PROMPTS = """
@@ -83,8 +86,8 @@ class DocumentAnalyzer:
         self._extract_nodes(data)
     
     def _extract_nodes(self, node_data: Dict[str, Any]):
-        """递归提取所有节点"""
-        # 跳过根节点
+        """递归提取所有节点，包括空行"""
+        # 跳过根节点，但保留空行节点用于上下文分析
         if node_data.get('type') != 'root':
             self.nodes.append(NodeInfo.from_dict(node_data))
         
@@ -127,6 +130,45 @@ class DocumentAnalyzer:
         
         return context_str
     
+    def generate_batch_context_string(self, start_index: int, batch_size: int) -> str:
+        """生成批量节点分析的上下文字符串"""
+        context_str = "=== 批量分析上下文信息 ===\n"
+        
+        # 前A个节点
+        start_before = max(0, start_index - CONTEXT_BEFORE_NODES)
+        before_nodes = self.nodes[start_before:start_index]
+        
+        if before_nodes:
+            context_str += f"\n前{CONTEXT_BEFORE_NODES}个节点:\n"
+            for i, node in enumerate(before_nodes):
+                context_str += f"\n前节点{i+1}:\n"
+                context_str += self.format_node_details(node, "  ")
+        else:
+            context_str += "\n前节点: 无\n"
+        
+        # 当前批量节点
+        end_index = min(len(self.nodes), start_index + batch_size)
+        current_batch = self.nodes[start_index:end_index]
+        
+        context_str += f"\n当前批量分析节点 (共{len(current_batch)}个):\n"
+        for i, node in enumerate(current_batch):
+            context_str += f"\n批量节点{i+1}:\n"
+            context_str += self.format_node_details(node, "  ")
+        
+        # 后B个节点
+        end_after = min(len(self.nodes), end_index + CONTEXT_AFTER_NODES)
+        after_nodes = self.nodes[end_index:end_after]
+        
+        if after_nodes:
+            context_str += f"\n后{CONTEXT_AFTER_NODES}个节点:\n"
+            for i, node in enumerate(after_nodes):
+                context_str += f"\n后节点{i+1}:\n"
+                context_str += self.format_node_details(node, "  ")
+        else:
+            context_str += "\n后节点: 无\n"
+        
+        return context_str
+    
     def format_node_details(self, node: NodeInfo, prefix: str = "") -> str:
         """格式化节点详细信息"""
         details = f"{prefix}节点内容: {node.content}\n"
@@ -150,33 +192,208 @@ class DocumentAnalyzer:
         
         if node.font_color:
             details += f"{prefix}字体颜色: {node.font_color.get('value', 'None')}\n"
-        
+
         return details
     
     def analyze_all_nodes(self) -> List[Dict[str, Any]]:
-        """对所有节点进行AI分析"""
+        """对所有节点进行批量AI分析，跳过空行节点"""
         if not self.ai_analyzer:
             print("DeepSeek API未配置，无法进行AI分析")
             return []
         
         results = []
+        analyzed_count = 0
+        skipped_count = 0
+        i = 0
         
-        for i, node in enumerate(self.nodes):
-            print(f"正在分析节点 {i+1}/{len(self.nodes)}: {node.content[:50]}...")
+        while i < len(self.nodes):
+            # 检查当前批次是否包含非空行节点
+            batch_end = min(len(self.nodes), i + BATCH_SIZE)
+            current_batch = self.nodes[i:batch_end]
             
-            # 生成上下文
-            context = self.generate_context_string(i)
+            # 过滤出非空行节点
+            non_empty_nodes = [node for node in current_batch if node.type != 'empty_line']
             
-            # 进行AI分析
-            analysis = self.ai_analyzer.analyze_single_node(node, context, PROMPTS)
+            if not non_empty_nodes:
+                # 整个批次都是空行，跳过
+                for j, node in enumerate(current_batch):
+                    node_index = i + j
+                    print(f"跳过空行节点 {node_index+1}/{len(self.nodes)}: [空行]")
+                    skipped_count += 1
+                    results.append({
+                        'node_index': node_index,
+                        'content': node.content,
+                        'analysis': '[跳过AI分析 - 空行节点]',
+                        'skipped': True,
+                        'batch_info': {
+                            'batch_start': i,
+                            'batch_size': len(current_batch),
+                            'batch_position': j
+                        }
+                    })
+                i = batch_end
+                continue
             
-            results.append({
-                'node_index': i,
-                'content': node.content,
-                'analysis': analysis
-            })
+            # 处理包含非空行节点的批次
+            if BATCH_SIZE == 1:
+                # 单节点分析模式（原有逻辑）
+                node = current_batch[0]
+                if node.type == 'empty_line':
+                    print(f"跳过空行节点 {i+1}/{len(self.nodes)}: [空行]")
+                    skipped_count += 1
+                    results.append({
+                        'node_index': i,
+                        'content': node.content,
+                        'analysis': '[跳过AI分析 - 空行节点]',
+                        'skipped': True,
+                        'batch_info': {
+                            'batch_start': i,
+                            'batch_size': 1,
+                            'batch_position': 0
+                        }
+                    })
+                else:
+                    analyzed_count += 1
+                    print(f"正在分析节点 {i+1}/{len(self.nodes)}: {node.content[:50]}...")
+                    
+                    # 生成单节点上下文
+                    context = self.generate_context_string(i)
+                    
+                    # 进行AI分析
+                    analysis = self.ai_analyzer.analyze_single_node(node, context, PROMPTS)
+                    
+                    results.append({
+                        'node_index': i,
+                        'content': node.content,
+                        'analysis': analysis,
+                        'skipped': False,
+                        'batch_info': {
+                            'batch_start': i,
+                            'batch_size': 1,
+                            'batch_position': 0
+                        }
+                    })
+                i += 1
+            else:
+                # 批量分析模式
+                analyzed_count += len(non_empty_nodes)
+                batch_content_preview = " | ".join([node.content[:20] + "..." for node in non_empty_nodes[:3]])
+                print(f"正在批量分析节点 {i+1}-{batch_end}/{len(self.nodes)} (共{len(current_batch)}个，{len(non_empty_nodes)}个非空): {batch_content_preview}")
+                
+                # 生成批量上下文
+                context = self.generate_batch_context_string(i, len(current_batch))
+                
+                # 进行批量AI分析
+                batch_analysis = self.ai_analyzer.analyze_batch_nodes(current_batch, context, PROMPTS)
+                
+                # 处理批量分析结果
+                for j, node in enumerate(current_batch):
+                    node_index = i + j
+                    if node.type == 'empty_line':
+                        skipped_count += 1
+                        results.append({
+                            'node_index': node_index,
+                            'content': node.content,
+                            'analysis': '[跳过AI分析 - 空行节点]',
+                            'skipped': True,
+                            'batch_info': {
+                                'batch_start': i,
+                                'batch_size': len(current_batch),
+                                'batch_position': j
+                            }
+                        })
+                    else:
+                        # 从批量分析结果中提取对应节点的分析
+                        node_analysis = self._extract_node_analysis_from_batch(batch_analysis, j, node)
+                        results.append({
+                            'node_index': node_index,
+                            'content': node.content,
+                            'analysis': node_analysis,
+                            'skipped': False,
+                            'batch_info': {
+                                'batch_start': i,
+                                'batch_size': len(current_batch),
+                                'batch_position': j,
+                                'batch_analysis': batch_analysis
+                            }
+                        })
+                
+                i = batch_end
         
+        print(f"\n分析完成统计: 总节点{len(self.nodes)}个, AI分析{analyzed_count}个, 跳过空行{skipped_count}个")
+        if BATCH_SIZE > 1:
+            print(f"批量分析模式: 每批{BATCH_SIZE}个节点")
         return results
+    
+    def _extract_node_analysis_from_batch(self, batch_analysis: str, node_position: int, node: NodeInfo) -> str:
+        """从批量分析结果中提取特定节点的分析结果"""
+        try:
+            # 尝试按节点分割批量分析结果
+            lines = batch_analysis.split('\n')
+            
+            # 查找节点标识符
+            node_markers = [
+                f"批量节点{node_position + 1}",
+                f"节点{node_position + 1}",
+                f"第{node_position + 1}个节点",
+                f"{node_position + 1}.",
+                f"({node_position + 1})"
+            ]
+            
+            # 查找节点内容标识符
+            content_markers = [
+                node.content[:30],  # 节点内容前30字符
+                node.content[:20],  # 节点内容前20字符
+                node.content[:10]   # 节点内容前10字符
+            ]
+            
+            start_line = -1
+            end_line = len(lines)
+            
+            # 查找当前节点的开始位置
+            for i, line in enumerate(lines):
+                for marker in node_markers + content_markers:
+                    if marker in line:
+                        start_line = i
+                        break
+                if start_line != -1:
+                    break
+            
+            # 查找下一个节点的开始位置（作为结束位置）
+            if start_line != -1:
+                next_node_markers = [
+                    f"批量节点{node_position + 2}",
+                    f"节点{node_position + 2}",
+                    f"第{node_position + 2}个节点",
+                    f"{node_position + 2}.",
+                    f"({node_position + 2})"
+                ]
+                
+                for i in range(start_line + 1, len(lines)):
+                    for marker in next_node_markers:
+                        if marker in lines[i]:
+                            end_line = i
+                            break
+                    if end_line != len(lines):
+                        break
+            
+            # 提取节点分析内容
+            if start_line != -1:
+                node_analysis_lines = lines[start_line:end_line]
+                node_analysis = '\n'.join(node_analysis_lines).strip()
+                
+                # 如果提取的内容为空或太短，返回完整的批量分析
+                if len(node_analysis) < 50:
+                    return f"[批量分析结果 - 节点{node_position + 1}]\n{batch_analysis}"
+                
+                return node_analysis
+            else:
+                # 如果无法精确提取，返回带标记的完整批量分析
+                return f"[批量分析结果 - 节点{node_position + 1}: {node.content[:30]}...]\n{batch_analysis}"
+                
+        except Exception as e:
+            # 如果提取失败，返回完整的批量分析结果
+            return f"[批量分析结果提取失败 - 节点{node_position + 1}: {str(e)}]\n{batch_analysis}"
 
 def main():
     """主函数"""
@@ -188,21 +405,51 @@ def check_file(file_path: str):
     """检查文件"""
     print(f"开始分析文件: {file_path}")
     analyzer = DocumentAnalyzer(file_path, api_key="sk-cf7edd378f41409b8270cbca5baef81b")
-    print(f"已加载 {len(analyzer.nodes)} 个节点，准备进行AI分析...")
+    print(f"已加载 {len(analyzer.nodes)} 个节点（包含空行），准备进行AI分析...")
     results = analyzer.analyze_all_nodes()
     print("\n=== AI分析结果 ===")
     last_result = None
+    ai_analyzed_count = 0
+    
     for i, result in enumerate(results):
+        # 检查是否是跳过的空行节点
+        if result.get('skipped', False):
+            print(f"\n节点 {result['node_index']+1}: {result['content']} [已跳过]")
+            continue
+        
+        ai_analyzed_count += 1
         print(f"\n节点 {result['node_index']+1}: {result['content']}")
         print("="*80)
         print(result['analysis'])
         print("="*80)
-        # 添加分隔符
-        if i < len(results) - 1:
+        
+        # 只在AI分析的节点之间添加分隔符
+        next_non_skipped = False
+        for j in range(i + 1, len(results)):
+            if not results[j].get('skipped', False):
+                next_non_skipped = True
+                break
+        
+        if next_non_skipped:
             print("\n" + "-"*100 + "\n")
+        
         last_result = result
-    print("所有节点分析完成。")
+    
+    print(f"\n所有节点分析完成。AI分析了 {ai_analyzed_count} 个有效节点。")
     return last_result
+
+def set_batch_size(size: int):
+    """设置批量分析的节点数"""
+    global BATCH_SIZE
+    BATCH_SIZE = max(1, size)  # 确保批量大小至少为1
+    print(f"批量分析大小已设置为: {BATCH_SIZE}")
+
+def set_context_range(before: int, after: int):
+    """设置上下文范围"""
+    global CONTEXT_BEFORE_NODES, CONTEXT_AFTER_NODES
+    CONTEXT_BEFORE_NODES = max(0, before)
+    CONTEXT_AFTER_NODES = max(0, after)
+    print(f"上下文范围已设置为: 前{CONTEXT_BEFORE_NODES}个节点, 后{CONTEXT_AFTER_NODES}个节点")
 
 if __name__ == "__main__":
     main()
