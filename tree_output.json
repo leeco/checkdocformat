@@ -415,7 +415,7 @@
         },
         {
             "type": "paragraph",
-            "content": "格式具体要求如下：",
+            "content": "格式具体 要求如下：",
             "font": "黑体",
             "size": 16.0,
             "font_size_name": "小三",
@@ -2128,7 +2128,7 @@
                             "indentation": {
                                 "left": {
                                     "type": "左缩进",
-                                    "value": 0,
+                                    "value": 148.75,
                                     "unit": "磅",
                                     "unit_code": "pt"
                                 },
@@ -2140,7 +2140,7 @@
                                 },
                                 "first_line": {
                                     "type": "首行缩进",
-                                    "value": 0,
+                                    "value": 21.25,
                                     "unit": "磅",
                                     "unit_code": "pt"
                                 }
@@ -2178,7 +2178,7 @@
                                 },
                                 "left_indent": {
                                     "type": "左缩进",
-                                    "value": 0,
+                                    "value": 148.75,
                                     "unit": "磅",
                                     "unit_code": "pt"
                                 },
@@ -2190,7 +2190,7 @@
                                 },
                                 "first_line_indent": {
                                     "type": "首行缩进",
-                                    "value": 0,
+                                    "value": 21.25,
                                     "unit": "磅",
                                     "unit_code": "pt"
                                 },
