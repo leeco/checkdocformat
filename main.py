@@ -6,24 +6,26 @@ import numpy as np  # 用于统计分析
 
 def pt_to_font_size(pt_size):
     """将磅值转换为中文标准字号"""
-    # 参考《GB/T 15834-2011 标点符号用法》和常用中文字号标准
+    # 参考《GB/T 15835-2011 印刷字体字号与磅值对照表》和常用中文排版标准
+    # 注意：有些标准（如教育部、新闻出版总署等）对字号与磅值的对应略有差异，常见对照如下：
+    # 42pt - 初号，36pt - 小初，26pt - 一号，24pt - 小一，22pt - 二号，18pt - 小二，16pt - 三号，15pt - 小三，14pt - 四号，12pt - 小四，10.5pt - 五号，9pt - 小五，7.5pt - 六号，5.5pt - 小六，5pt - 七号
+    # 但在部分办公软件（如Word）和部分出版物中，16pt 也常被称为“小三”，18pt 为“三号”，请根据实际需求调整。
     font_size_map = {
         42: '初号',      # 42pt
         36: '小初',      # 36pt
-        32: '一号',      # 32pt
-        28: '小一',      # 28pt
-        24: '二号',      # 24pt
-        22: '小二',      # 22pt
-        18: '三号',      # 18pt
-        16: '小三',      # 16pt
-        15: '四号',      # 15pt
-        14: '小四',      # 14pt
-        12: '五号',      # 12pt
-        10.5: '小五',    # 10.5pt
-        9: '六号',       # 9pt
-        7.5: '小六',     # 7.5pt
-        5.5: '七号',     # 5.5pt
-        5: '八号',       # 5pt
+        26: '一号',      # 26pt
+        24: '小一',      # 24pt
+        22: '二号',      # 22pt
+        18: '小二',      # 18pt
+        16: '三号',      # 16pt
+        15: '小三',      # 15pt
+        14: '四号',      # 14pt
+        12: '小四',      # 12pt
+        10.5: '五号',    # 10.5pt
+        9: '小五',       # 9pt
+        7.5: '六号',     # 7.5pt
+        5.5: '小六',     # 5.5pt
+        5: '七号',       # 5pt
     }
     # 找到最接近的字号
     closest_size = min(font_size_map.keys(), key=lambda x: abs(x - pt_size))
@@ -437,7 +439,7 @@ def parse_docx_to_tree(file_path):
     return root
 
 # Example usage
-file_path = 'example.docx'  # Replace with your file path
+file_path = '1.docx'  # Replace with your file path
 tree_root = parse_docx_to_tree(file_path)
 
 # Print tree as JSON
