@@ -7,7 +7,7 @@ from ai_analysis import create_analyzer
 
 # 全局变量：控制上下文范围
 CONTEXT_BEFORE_NODES = 5  # 前N个节点
-CONTEXT_AFTER_NODES = 1   # 后M个节点
+CONTEXT_AFTER_NODES = 5   # 后M个节点
 
 # 格式要求定义
 PROMPTS = """
@@ -180,33 +180,29 @@ class DocumentAnalyzer:
 
 def main():
     """主函数"""
-    # 检查API密钥
-    api_key = "sk-cf7edd378f41409b8270cbca5baef81b"  # 请替换为您的API密钥
-    
-    # 创建分析器
-    analyzer = DocumentAnalyzer('tree_output.json', api_key)
-    
-    print(f"总共解析到 {len(analyzer.nodes)} 个节点")
-    print(f"上下文设置：前{CONTEXT_BEFORE_NODES}个节点，后{CONTEXT_AFTER_NODES}个节点")
-    print(f"AI分析: {'启用' if api_key else '未启用'}\n")
-    
-    # 对所有节点进行AI分析
-    if api_key:
-        print("=== 开始AI分析所有节点 ===")
-        results = analyzer.analyze_all_nodes()
-        
-        print("\n=== AI分析结果 ===")
-        for i, result in enumerate(results):
-            print(f"\n节点 {result['node_index']+1}: {result['content']}")
-            print("="*80)
-            print(result['analysis'])
-            print("="*80)
-            
-            # 添加分隔符
-            if i < len(results) - 1:
-                print("\n" + "-"*100 + "\n")
-    else:
-        print("请设置API密钥以启用AI分析功能")
+    # 直接调用 check_file 实现主流程
+    file_path = 'tree_output.json'
+    check_file(file_path)
+
+def check_file(file_path: str):
+    """检查文件"""
+    print(f"开始分析文件: {file_path}")
+    analyzer = DocumentAnalyzer(file_path, api_key="sk-cf7edd378f41409b8270cbca5baef81b")
+    print(f"已加载 {len(analyzer.nodes)} 个节点，准备进行AI分析...")
+    results = analyzer.analyze_all_nodes()
+    print("\n=== AI分析结果 ===")
+    last_result = None
+    for i, result in enumerate(results):
+        print(f"\n节点 {result['node_index']+1}: {result['content']}")
+        print("="*80)
+        print(result['analysis'])
+        print("="*80)
+        # 添加分隔符
+        if i < len(results) - 1:
+            print("\n" + "-"*100 + "\n")
+        last_result = result
+    print("所有节点分析完成。")
+    return last_result
 
 if __name__ == "__main__":
     main()

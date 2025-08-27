@@ -3,13 +3,10 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
 from docx.shared import Inches, Cm, Mm, Pt, Emu
 import json
 import numpy as np  # 用于统计分析
+from check import check_file
 
 def pt_to_font_size(pt_size):
     """将磅值转换为中文标准字号"""
-    # 参考《GB/T 15835-2011 印刷字体字号与磅值对照表》和常用中文排版标准
-    # 注意：有些标准（如教育部、新闻出版总署等）对字号与磅值的对应略有差异，常见对照如下：
-    # 42pt - 初号，36pt - 小初，26pt - 一号，24pt - 小一，22pt - 二号，18pt - 小二，16pt - 三号，15pt - 小三，14pt - 四号，12pt - 小四，10.5pt - 五号，9pt - 小五，7.5pt - 六号，5.5pt - 小六，5pt - 七号
-    # 但在部分办公软件（如Word）和部分出版物中，16pt 也常被称为“小三”，18pt 为“三号”，请根据实际需求调整。
     font_size_map = {
         42: '初号',      # 42pt
         36: '小初',      # 36pt
@@ -28,10 +25,6 @@ def pt_to_font_size(pt_size):
         5: '七号',       # 5pt
     }
     # 找到最接近的字号
-    closest_size = min(font_size_map.keys(), key=lambda x: abs(x - pt_size))
-    return font_size_map[closest_size]
-    
-    # Find the closest font size
     closest_size = min(font_size_map.keys(), key=lambda x: abs(x - pt_size))
     return font_size_map[closest_size]
 
@@ -109,6 +102,83 @@ def get_font_size_distribution(doc):
         sizes.append(size)
     return sizes
 
+def get_alignment_from_xml(paragraph):
+    """尝试从XML中直接获取对齐方式"""
+    try:
+        # 获取段落的XML元素
+        p_element = paragraph._element
+        
+        # 查找段落属性
+        pPr = p_element.find('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPr')
+        if pPr is not None:
+            # 查找对齐方式元素
+            jc = pPr.find('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}jc')
+            if jc is not None:
+                val = jc.get('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val')
+                if val:
+                    # XML中的对齐方式值映射
+                    xml_alignment_map = {
+                        'left': '左对齐',
+                        'center': '居中',
+                        'right': '右对齐',
+                        'both': '两端对齐',
+                        'justify': '两端对齐',
+                        'distribute': '分散对齐',
+                        'start': '左对齐',
+                        'end': '右对齐'
+                    }
+                    return xml_alignment_map.get(val, f'XML对齐方式({val})')
+        
+        return '左对齐'  # XML中没有找到时的默认值
+        
+    except Exception as e:
+        print(f"从XML获取对齐方式时出错: {e}")
+        return '左对齐'
+
+def get_alignment_info(pf, paragraph):
+    """获取段落对齐方式的修复版本"""
+    # 完整的对齐方式映射（只包含python-docx实际支持的）
+    alignment_map = {
+        0: '左对齐',           # WD_ALIGN_PARAGRAPH.LEFT
+        1: '居中',            # WD_ALIGN_PARAGRAPH.CENTER  
+        2: '右对齐',          # WD_ALIGN_PARAGRAPH.RIGHT
+        3: '两端对齐',        # WD_ALIGN_PARAGRAPH.JUSTIFY
+        4: '分散对齐',        # WD_ALIGN_PARAGRAPH.DISTRIBUTE (如果存在)
+        7: '泰文两端对齐'     # WD_ALIGN_PARAGRAPH.THAI_JUSTIFY (如果存在)
+    }
+    
+    # 尝试多种方法获取对齐方式
+    alignment_value = None
+    alignment_name = '未知'
+    
+    try:
+        # 方法1：直接获取alignment属性
+        if hasattr(pf, 'alignment') and pf.alignment is not None:
+            alignment_value = pf.alignment
+            # 如果是枚举对象，获取其数值
+            if hasattr(alignment_value, 'value'):
+                alignment_numeric = alignment_value.value
+            else:
+                alignment_numeric = int(alignment_value) if alignment_value is not None else None
+            
+            if alignment_numeric is not None:
+                alignment_name = alignment_map.get(alignment_numeric, f'未知对齐方式({alignment_numeric})')
+            else:
+                alignment_name = '左对齐'  # 默认值
+        else:
+            # 方法2：尝试通过XML直接读取
+            alignment_name = get_alignment_from_xml(paragraph)
+            
+    except Exception as e:
+        print(f"获取对齐方式时出错: {e}")
+        alignment_name = '左对齐'  # 出错时的默认值
+    
+    return {
+        'type': '对齐方式',
+        'value': alignment_name,
+        'raw_value': str(alignment_value) if alignment_value is not None else 'None'
+    }
+
 def extract_paragraph_formatting(paragraph):
     """Extract detailed formatting information from paragraph including all properties from the dialog."""
     format_info = {}
@@ -117,44 +187,13 @@ def extract_paragraph_formatting(paragraph):
     pf = paragraph.paragraph_format
     
     # 1. 常规 (General) Section
-    # Alignment (对齐方式) - 使用正确的Word对齐常量
-    alignment_map = {
-        WD_ALIGN_PARAGRAPH.LEFT: '左对齐',
-        WD_ALIGN_PARAGRAPH.CENTER: '居中',
-        WD_ALIGN_PARAGRAPH.RIGHT: '右对齐',
-        WD_ALIGN_PARAGRAPH.JUSTIFY: '两端对齐',
-        WD_ALIGN_PARAGRAPH.DISTRIBUTE: '分散对齐',
-        WD_ALIGN_PARAGRAPH.THAI_JUSTIFY: '泰文两端对齐',
-        WD_ALIGN_PARAGRAPH.JUSTIFY_MED: '两端对齐(中等)',
-        WD_ALIGN_PARAGRAPH.JUSTIFY_HI: '两端对齐(高)',
-        WD_ALIGN_PARAGRAPH.JUSTIFY_LOW: '两端对齐(低)'
-    }
-    
-    if pf.alignment is not None:
-        format_info['alignment'] = {
-            'type': '对齐方式',
-            'value': alignment_map.get(pf.alignment, str(pf.alignment)),
-            'raw_value': str(pf.alignment)
-        }
-    else:
-        format_info['alignment'] = {
-            'type': '对齐方式',
-            'value': '左对齐',
-            'raw_value': 'None'
-        }
+    # Alignment (对齐方式) - 使用修复后的函数
+    format_info['alignment'] = get_alignment_info(pf, paragraph)
     
     # Outline Level (大纲级别)
     outline_map = {
-        0: '标题1',
-        1: '标题2', 
-        2: '标题3',
-        3: '标题4',
-        4: '标题5',
-        5: '标题6',
-        6: '标题7',
-        7: '标题8',
-        8: '标题9',
-        9: '正文文本'
+        0: '标题1', 1: '标题2', 2: '标题3', 3: '标题4', 4: '标题5',
+        5: '标题6', 6: '标题7', 7: '标题8', 8: '标题9', 9: '正文文本'
     }
     
     if hasattr(pf, 'outline_level') and pf.outline_level is not None:
@@ -438,20 +477,13 @@ def parse_docx_to_tree(file_path):
     
     return root
 
-# Example usage
-file_path = '1.docx'  # Replace with your file path
-tree_root = parse_docx_to_tree(file_path)
-
-# Print tree as JSON
-print(json.dumps(tree_root.to_dict(), indent=4, ensure_ascii=False))
-
 # Print as tree string
 def print_tree(node, indent=0):
     spacing_info = f"spacing={node.spacing}" if node.spacing else ""
     line_spacing_info = f"line_spacing={node.line_spacing}" if node.line_spacing else ""
     indent_info = f"indent={node.indentation}" if node.indentation else ""
-    alignment_info = f"alignment={node.alignment}" if node.alignment else ""
-    outline_info = f"outline={node.outline_level}" if node.outline_level else ""
+    alignment_info = f"alignment={node.alignment['value'] if node.alignment else 'None'}"
+    outline_info = f"outline={node.outline_level['value'] if node.outline_level else 'None'}"
     font_size_info = f"字号={node.font_size_name}" if node.font_size_name else ""
     
     info_parts = [f"font={node.font}", f"size={node.size}pt", f"bold={node.bold}"]
@@ -473,11 +505,28 @@ def print_tree(node, indent=0):
     for child in node.children:
         print_tree(child, indent + 1)
 
-print("\n" + "="*50)
-print("TREE STRUCTURE:")
-print("="*50)
-print_tree(tree_root)
+# Example usage
+if __name__ == "__main__":
+    file_path = '1.docx'  # Replace with your file path
+    tree_root = parse_docx_to_tree(file_path)
 
-# Save to JSON file
-with open('tree_output.json', 'w', encoding='utf-8') as f:
-    json.dump(tree_root.to_dict(), f, ensure_ascii=False, indent=4)
+    # Print tree as JSON
+    print("正在生成JSON输出...")
+    json_output = json.dumps(tree_root.to_dict(), indent=4, ensure_ascii=False)
+    
+    # Save to JSON file
+    with open('tree_output.json', 'w', encoding='utf-8') as f:
+        f.write(json_output)
+    
+    print("JSON文件已保存为 'tree_output.json'")
+    
+    # Print tree structure
+    print("\n" + "="*50)
+    print("TREE STRUCTURE:")
+    print("="*50)
+    print_tree(tree_root)
+    
+    print(f"\n解析完成! JSON文件已保存。")
+    print(f"共解析了 {len([n for n in tree_root.children])} 个顶级节点。")
+   
+    check_file('tree_output.json')
