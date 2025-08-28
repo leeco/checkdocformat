@@ -10,25 +10,7 @@ CONTEXT_BEFORE_NODES = 5  # 前A个节点
 CONTEXT_AFTER_NODES = 5   # 后B个节点
 
 # 全局变量：控制批量分析
-BATCH_SIZE = 5  # 一次性分析的相邻节点数N，默认为1（单节点分析）
-
-# 格式要求定义
-PROMPTS = """
-格式具体 要求如下：
-一、标题
-由单位名称、事由和文种组成。其中单位名称可视情况省略，但事由和文种必备；字体为方正小标宋简体，字号为二号且不加粗。(补充：标题中发文机关字体为方正小标宋简体，字号为小初且不加粗。)
-二、正文
-字体为仿宋_GB2312，字号为三号且不加粗，编排于主送机关名称下一行，每个自然段左空二字，回行顶格。一般每面排22行,每行排28个字，特殊情况除外。
-三、公文的结构层次序数
-文中结构层次序数依次可以用“一、”“（一）”“1.”“（1）”标注；一般第一层用黑体三号字不加粗、第二层用楷体三号字、第三层和第四层用仿宋_GB2312三号字标注。
-实际行文中，如果不需要全部四个层次，只有两个层次时，可按顺序跳用，第一层使用“一、”，第二层可使用（一）或“1.”表示，只有一个层次时，使用“一、”
-四、结尾
-特此报告\请示\申请。另起一行，左空二字，字体为仿宋_GB2312三号。
-五、落款
-拟稿部门或单位：没有附件时，则正文下空一行，右空四字；有附件时，则附件下空二行，右空四字。日期：用阿拉伯数字将年、月、日标全，年份应标全称，月、日不编虚位（即1不编为01），另起一行，位于拟稿部门或单位下方正中间。
-六、附件说明
-正文下空一行左空二字编排“附件”二字，后标全角冒号和附件名称。如有多个附件，使用阿拉伯数字标注附件顺序号（如：“附件：1.XXXX”）；附件名称后不加标点符号。附件名称较长需回行时，应当与上一行附件名称的首字对齐。字体为仿宋_GB2312三号）
-"""
+BATCH_SIZE = 1  # 一次性分析的相邻节点数N，默认为1（单节点分析）
 
 
 @dataclass
@@ -212,7 +194,7 @@ class DocumentAnalyzer:
             current_batch = self.nodes[i:batch_end]
             
             # 过滤出非空行节点
-            non_empty_nodes = [node for node in current_batch if node.type != 'empty_line']
+            non_empty_nodes = [node for node in current_batch if node.type != '空行']
             
             if not non_empty_nodes:
                 # 整个批次都是空行，跳过
@@ -238,7 +220,7 @@ class DocumentAnalyzer:
             if BATCH_SIZE == 1:
                 # 单节点分析模式（原有逻辑）
                 node = current_batch[0]
-                if node.type == 'empty_line':
+                if node.type == '空行':
                     print(f"跳过空行节点 {i+1}/{len(self.nodes)}: [空行]")
                     skipped_count += 1
                     results.append({
@@ -260,7 +242,7 @@ class DocumentAnalyzer:
                     context = self.generate_context_string(i)
                     
                     # 进行AI分析
-                    analysis = self.ai_analyzer.analyze_single_node(node, context, PROMPTS)
+                    analysis = self.ai_analyzer.analyze_single_node(node, context)
                     
                     results.append({
                         'node_index': i,
@@ -284,12 +266,12 @@ class DocumentAnalyzer:
                 context = self.generate_batch_context_string(i, len(current_batch))
                 
                 # 进行批量AI分析
-                batch_analysis = self.ai_analyzer.analyze_batch_nodes(current_batch, context, PROMPTS)
+                batch_analysis = self.ai_analyzer.analyze_batch_nodes(current_batch, context)
                 
                 # 处理批量分析结果
                 for j, node in enumerate(current_batch):
                     node_index = i + j
-                    if node.type == 'empty_line':
+                    if node.type == '空行':
                         skipped_count += 1
                         results.append({
                             'node_index': node_index,

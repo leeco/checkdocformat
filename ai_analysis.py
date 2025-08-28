@@ -4,6 +4,26 @@ import json
 from typing import Dict, Any, Optional, Generator
 from dataclasses import dataclass
 
+
+# 格式要求定义
+PROMPTS = """
+格式具体 要求如下：
+一、标题
+由单位名称、事由和文种组成。其中单位名称可视情况省略，但事由和文种必备；字体为方正小标宋简体，字号为二号且不加粗。(补充：标题中发文机关字体为方正小标宋简体，字号为小初且不加粗。)
+二、正文
+字体为仿宋_GB2312，字号为三号且不加粗，编排于主送机关名称下一行，每个自然段左空二字，回行顶格。一般每面排22行,每行排28个字，特殊情况除外。
+三、公文的结构层次序数
+文中结构层次序数依次可以用“一、”“（一）”“1.”“（1）”标注；一般第一层用黑体三号字不加粗、第二层用楷体三号字、第三层和第四层用仿宋_GB2312三号字标注。
+实际行文中，如果不需要全部四个层次，只有两个层次时，可按顺序跳用，第一层使用“一、”，第二层可使用（一）或“1.”表示，只有一个层次时，使用“一、”
+四、结尾
+特此报告\请示\申请。另起一行，左空二字，字体为仿宋_GB2312三号。
+五、落款
+拟稿部门或单位：没有附件时，则正文下空一行，右空四字；有附件时，则附件下空二行，右空四字。日期：用阿拉伯数字将年、月、日标全，年份应标全称，月、日不编虚位（即1不编为01），另起一行，位于拟稿部门或单位下方正中间。
+六、附件说明
+正文下空一行左空二字编排“附件”二字，后标全角冒号和附件名称。如有多个附件，使用阿拉伯数字标注附件顺序号（如：“附件：1.XXXX”）；附件名称后不加标点符号。附件名称较长需回行时，应当与上一行附件名称的首字对齐。字体为仿宋_GB2312三号）
+"""
+
+
 # 全局变量：控制流式输出
 ENABLE_STREAMING = True  # 是否启用流式输出
 STREAMING_DELAY = 0.05  # 流式输出延迟（秒）
@@ -37,20 +57,20 @@ class DeepSeekAnalyzer:
             "Content-Type": "application/json"
         }
     
-    def analyze_node_streaming(self, node_info: str, context: str, format_requirements: str) -> Generator[str, None, None]:
+    def analyze_node_streaming(self, node_info: str, context: str) -> Generator[str, None, None]:
         """使用DeepSeek R1进行流式分析"""
+        # 在函数内部获取格式要求，不再作为参数传入
+        format_requirements = PROMPTS
         
         prompt = f"""你是一个专业的文档格式检查专家。请分析以下文档节点的格式是否符合要求。
-
-文档格式要求：
-{format_requirements}
-
 当前节点信息：
 {node_info}
-
+--------------------------------
 上下文信息：
 {context}
-
+--------------------------------
+文档格式要求：
+{format_requirements}
 请从以下几个方面进行分析：
 1. 节点类型识别（是否为拟稿部门、日期等）
 2. 格式合规性检查（字体、字号、对齐、缩进等）
@@ -61,11 +81,13 @@ class DeepSeekAnalyzer:
     -分割线
     -页眉页脚
     -加载两分割线之间的，且可能为落款的内容部分
-    
-输出审查结果，如果审查结果为不符合要求，则需要给出具体原因和建议。输出格式如下：
-审查结果：通过|不通过
+
+请根据上述要求，逐条进行审查，输出应简明扼要、结构清晰，仅限于要求范围内的信息，避免添加无关内容。
+如发现不符合要求，请明确指出具体原因并给出修改建议。输出格式如下：
+审查结果：通过 | 不通过
 不通过原因：XXX
 修改建议：XXX
+
 
 
 请用中文回答，格式要清晰易读。"""
@@ -124,8 +146,10 @@ class DeepSeekAnalyzer:
             if ENABLE_STREAMING:
                 print(error_msg)
     
-    def analyze_node(self, node_info: str, context: str, format_requirements: str) -> str:
+    def analyze_node(self, node_info: str, context: str) -> str:
         """使用DeepSeek R1分析节点格式（非流式）"""
+        # 在函数内部获取格式要求，不再作为参数传入
+        format_requirements = PROMPTS
         
         prompt = f"""你是一个专业的文档格式检查专家。请分析以下文档节点的格式是否符合要求。
 
@@ -186,7 +210,7 @@ class DeepSeekAnalyzer:
         except Exception as e:
             return f"分析过程中出现错误: {str(e)}"
     
-    def analyze_node_with_streaming_control(self, node_info: str, context: str, format_requirements: str) -> str:
+    def analyze_node_with_streaming_control(self, node_info: str, context: str) -> str:
         """根据全局变量控制是否使用流式输出"""
         if ENABLE_STREAMING:
             print("\n=== 开始流式分析 ===")
@@ -200,12 +224,12 @@ class DeepSeekAnalyzer:
             short_content = str(content_to_print)[:30]
             print(f"\033[34m节点内容: {short_content}\033[0m")
             full_response = ""
-            for chunk in self.analyze_node_streaming(node_info, context, format_requirements):
+            for chunk in self.analyze_node_streaming(node_info, context):
                 full_response += chunk
             print("\n=== 流式分析完成 ===")
             return full_response
         else:
-            return self.analyze_node(node_info, context, format_requirements)
+            return self.analyze_node(node_info, context)
     
     def analyze_batch(self, nodes_data: list, format_requirements: str, delay: float = 1.0) -> list:
         """批量分析多个节点"""
@@ -216,8 +240,7 @@ class DeepSeekAnalyzer:
             
             analysis = self.analyze_node_with_streaming_control(
                 node_data['node_info'],
-                node_data['context'],
-                format_requirements
+                node_data['context']
             )
             
             results.append({
@@ -231,8 +254,10 @@ class DeepSeekAnalyzer:
         
         return results
     
-    def analyze_batch_nodes(self, nodes: list, context: str, format_requirements: str) -> str:
+    def analyze_batch_nodes(self, nodes: list, context: str) -> str:
         """分析一批相邻节点（作为一个整体）"""
+        # 在函数内部获取格式要求，不再作为参数传入
+        format_requirements = PROMPTS
         
         # 构建批量节点信息
         batch_info = "=== 批量节点分析 ===\n"
@@ -349,10 +374,10 @@ class DocumentAnalyzer:
 
         return node_info
     
-    def analyze_single_node(self, node: NodeInfo, context: str, format_requirements: str) -> str:
+    def analyze_single_node(self, node: NodeInfo, context: str) -> str:
         """分析单个节点"""
         node_info = self.generate_node_info(node)
-        return self.analyzer.analyze_node_with_streaming_control(node_info, context, format_requirements)
+        return self.analyzer.analyze_node_with_streaming_control(node_info, context)
     
     def analyze_nodes_with_context(self, nodes: list, context_generator, format_requirements: str) -> list:
         """分析带上下文的节点列表"""
@@ -370,9 +395,9 @@ class DocumentAnalyzer:
         
         return self.analyzer.analyze_batch(nodes_data, format_requirements)
     
-    def analyze_batch_nodes(self, nodes: list, context: str, format_requirements: str) -> str:
+    def analyze_batch_nodes(self, nodes: list, context: str) -> str:
         """批量分析相邻节点"""
-        return self.analyzer.analyze_batch_nodes(nodes, context, format_requirements)
+        return self.analyzer.analyze_batch_nodes(nodes, context)
 
 # 配置常量
 DEEPSEEK_API_KEY = "sk-908c59db6a72469d9dcbd3607a9e2338"  # 请替换为您的API密钥
@@ -427,9 +452,7 @@ if __name__ == "__main__":
         
         # 测试分析
         test_context = "这是测试上下文信息"
-        test_requirements = "测试格式要求"
-        
-        result = analyzer.analyze_single_node(test_node, test_context, test_requirements)
+        result = analyzer.analyze_single_node(test_node, test_context)
         print("\n完整分析结果:")
         print(result)
     else:

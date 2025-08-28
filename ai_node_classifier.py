@@ -48,19 +48,19 @@ class AINodeClassifier:
 {context_str}
 
 请从以下类型中选择最合适的一个：
-1. document_title - 发文标题（由单位名称、事由和文种组成，通常居中，字体较大）
-2. addressee - 主送机关（如："XX市人民政府："）
-3. heading1 - 一级标题（如：一、二、三、等）
-4. heading2 - 二级标题（如：（一）（二）等）  
-5. heading3 - 三级标题（如：1. 2. 3. 等）
-6. heading4 - 四级标题（如：（1）（2）等）
-7. paragraph - 普通段落（正文内容）
-8. list_item - 列表项（注意：不要将列表项误判为标题）
-9. ending - 结尾（如："特此报告"、"特此请示"、"特此申请"等）
-10. signature - 落款（发文单位名称和日期）
-11. attachment - 附件说明（如："附件：1.XXXX"）
-12. separator - 分隔符（如："———"、"＊＊＊"等）
-13. empty_line - 空行
+1. 发文标题 - 由单位名称、事由和文种组成，通常居中，字体较大
+2. 主送机关 - 如："XX市人民政府："
+3. 一级标题 - 如：一、二、三、等
+4. 二级标题 - 如：（一）（二）等  
+5. 三级标题 - 如：1. 2. 3. 等
+6. 四级标题 - 如：（1）（2）等
+7. 普通段落 - 正文内容
+8. 列表项 - 注意：不要将列表项误判为标题
+9. 结尾 - 如："特此报告"、"特此请示"、"特此申请"等
+10. 落款 - 发文单位名称和日期
+11. 附件 - 附件说明，如："附件：1.XXXX"
+12. 分隔符 - 如："———"、"＊＊＊"等
+13. 空行 - 空行
 
 判断标准：
 - 发文标题：通常位于文档开头，居中对齐，包含事由和文种
@@ -100,8 +100,8 @@ class AINodeClassifier:
                 classification = result['choices'][0]['message']['content'].strip().lower()
                 
                 # 验证返回的类型是否有效
-                valid_types = ['document_title', 'addressee', 'heading1', 'heading2', 'heading3', 'heading4', 
-                              'paragraph', 'list_item', 'ending', 'signature', 'attachment', 'separator', 'empty_line']
+                valid_types = ['发文标题', '主送机关', '一级标题', '二级标题', '三级标题', '四级标题', 
+                              '普通段落', '列表项', '结尾', '落款', '附件', '分隔符', '空行']
                 if classification in valid_types:
                     return classification
                 else:
@@ -121,33 +121,33 @@ class AINodeClassifier:
         
         # 检查空行
         if not content_stripped:
-            return 'empty_line'
+            return '空行'
         
         # 检查分隔符（主要由符号组成）
         if self._is_separator(content_stripped):
-            return 'separator'
+            return '分隔符'
         
         # 检查附件
         if content_stripped.startswith('附件：') or content_stripped.startswith('附件:'):
-            return 'attachment'
+            return '附件'
         
         # 检查结尾
         ending_patterns = ['特此报告', '特此请示', '特此申请', '特此函告', '特此通知', '特此通报']
         if any(pattern in content_stripped for pattern in ending_patterns):
-            return 'ending'
+            return '结尾'
         
         # 检查主送机关（以冒号结尾）
         if content_stripped.endswith('：') or content_stripped.endswith(':'):
             # 进一步判断是否包含机关名称
             addressee_keywords = ['政府', '委员会', '局', '厅', '部', '院', '处', '科', '司', '公司', '单位']
             if any(keyword in content_stripped for keyword in addressee_keywords):
-                return 'addressee'
+                return '主送机关'
         
         # 检查落款（包含日期格式）
         import re
         date_pattern = r'\d{4}年\d{1,2}月\d{1,2}日'
         if re.search(date_pattern, content_stripped):
-            return 'signature'
+            return '落款'
         
         # 检查发文标题（通常居中，字号较大，在文档开头）
         alignment_value = node_info.alignment.get('value') if node_info.alignment else ''
@@ -155,50 +155,50 @@ class AINodeClassifier:
             # 检查是否包含文种关键词
             document_types = ['报告', '请示', '申请', '通知', '通报', '函', '意见', '决定', '通告', '公告', '令']
             if any(doc_type in content_stripped for doc_type in document_types):
-                return 'document_title'
+                return '发文标题'
         
         # 检查是否为列表项
         if self._is_list_item(content_stripped):
-            return 'list_item'
+            return '列表项'
         
         # 检查标题模式
         # Level 1: "一、", "二、", "三、" etc.
         if content_stripped and content_stripped[0] in '一二三四五六七八九十' and '、' in content_stripped[:3]:
-            return 'heading1'
+            return '一级标题'
         
         # Level 2: "（一）", "（二）" etc.
         if content_stripped.startswith('（') and content_stripped[1] in '一二三四五六七八九十' and '）' in content_stripped:
-            return 'heading2'
+            return '二级标题'
         
         # Level 3: "1.", "2." etc.
         if content_stripped and content_stripped[0].isdigit() and '.' in content_stripped[:3]:
-            return 'heading3'
+            return '三级标题'
         
         # Level 4: "（1）", "（2）" etc.
         if content_stripped.startswith('（') and content_stripped[1].isdigit() and '）' in content_stripped:
-            return 'heading4'
+            return '四级标题'
         
         # 检查Word大纲级别
         if node_info.outline_level and node_info.outline_level.get('value') != '正文文本':
             outline_value = node_info.outline_level.get('value', '')
             if outline_value == '标题1':
-                return 'heading1'
+                return '一级标题'
             elif outline_value == '标题2':
-                return 'heading2'
+                return '二级标题'
             elif outline_value == '标题3':
-                return 'heading3'
+                return '三级标题'
             elif outline_value == '标题4':
-                return 'heading4'
+                return '四级标题'
         
         # 检查字体特征
         if node_info.bold and node_info.size >= 16:
-            return 'heading1'
+            return '一级标题'
         elif node_info.bold and node_info.size >= 14:
-            return 'heading2'
+            return '二级标题'
         elif node_info.bold and node_info.size >= 12:
-            return 'heading3'
+            return '三级标题'
         
-        return 'paragraph'
+        return '普通段落'
     
     def _is_list_item(self, content: str) -> bool:
         """判断是否为列表项"""
@@ -317,84 +317,84 @@ if __name__ == "__main__":
             'size': 22.0,
             'bold': False,
             'alignment': {'value': '居中'},
-            'expected': 'document_title'
+            'expected': '发文标题'
         },
         {
             'content': 'XX市人民政府：',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'addressee'
+            'expected': '主送机关'
         },
         {
             'content': '一、项目概述',
             'font': '黑体',
             'size': 14.0,
             'bold': False,
-            'expected': 'heading1'
+            'expected': '一级标题'
         },
         {
             'content': '（一）项目背景',
             'font': '楷体',
             'size': 14.0,
             'bold': False,
-            'expected': 'heading2'
+            'expected': '二级标题'
         },
         {
             'content': '1. 技术方案',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'heading3'
+            'expected': '三级标题'
         },
         {
             'content': '（1）系统架构',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'heading4'
+            'expected': '四级标题'
         },
         {
             'content': '• 系统架构设计',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'list_item'
+            'expected': '列表项'
         },
         {
             'content': '这是一个普通的段落内容，包含详细的描述信息。',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'paragraph'
+            'expected': '普通段落'
         },
         {
             'content': '特此报告',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'ending'
+            'expected': '结尾'
         },
         {
             'content': 'XX单位\n2024年1月15日',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'signature'
+            'expected': '落款'
         },
         {
             'content': '附件：1.项目实施方案',
             'font': '仿宋_GB2312',
             'size': 14.0,
             'bold': False,
-            'expected': 'attachment'
+            'expected': '附件'
         },
         {
             'content': '——————————————————',
             'font': '宋体',
             'size': 12.0,
             'bold': False,
-            'expected': 'separator'
+            'expected': '分隔符'
         }
     ]
     

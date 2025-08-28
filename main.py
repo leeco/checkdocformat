@@ -699,19 +699,19 @@ def parse_docx_to_tree(file_path, api_key: str = None):
         # Build tree: Adjust stack based on level
         # 更新层级映射，包含所有支持的节点类型
         level_map = {
-            'document_title': 0,  # 发文标题层级最高
-            'addressee': 1,       # 主送机关
-            'heading1': 2,        # 一级标题
-            'heading2': 3,        # 二级标题  
-            'heading3': 4,        # 三级标题
-            'heading4': 5,        # 四级标题
-            'list_item': 6,       # 列表项
-            'paragraph': 7,       # 普通段落
-            'ending': 8,          # 结尾
-            'signature': 9,       # 落款
-            'attachment': 10,     # 附件
-            'separator': 11,      # 分隔符
-            'empty_line': 12      # 空行层级最低，不影响文档结构
+            '发文标题': 0,        # 发文标题层级最高
+            '主送机关': 1,        # 主送机关
+            '一级标题': 2,        # 一级标题
+            '二级标题': 3,        # 二级标题  
+            '三级标题': 4,        # 三级标题
+            '四级标题': 5,        # 四级标题
+            '列表项': 6,          # 列表项
+            '普通段落': 7,        # 普通段落
+            '结尾': 8,            # 结尾
+            '落款': 9,            # 落款
+            '附件': 10,           # 附件
+            '分隔符': 11,         # 分隔符
+            '空行': 12            # 空行层级最低，不影响文档结构
         }
         
         current_level = level_map.get(node_type, 6)
@@ -724,7 +724,7 @@ def parse_docx_to_tree(file_path, api_key: str = None):
 
 # Example usage
 if __name__ == "__main__":
-    file_path = 'example.docx'  # Replace with your file path
+    file_path = '1.docx'  # Replace with your file path
     
     # 解析文档
     tree_root = parse_docx_to_tree(file_path)
